@@ -30,7 +30,7 @@ Generic versions called:
 # A basic basic pattern of MeReferences 
 
 * You need a reference to an Object that will execute the method 
-* You need a Method 
+* You need a Method (or the string name of a method - as here)
 * You need Classes of the types of parameters the method takes
 
 Let's say there is a class called: 
