@@ -44,8 +44,9 @@ Let's say there is a class called:
 
     ImportantClass{ ... content ...}
 
-and in that class there is a method with the following signature 
-public String methodName (int number)
+and in that class there is a method with the following signature
+
+    public String methodName (int number) { ... ... }
 
 What you do to make a MeReference is to write:
 
