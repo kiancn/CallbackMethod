@@ -20,15 +20,24 @@ public class ExampleMain
         /* this class can take a method-reference (and execute it through another method) */
         AnotherClass anotherClassObj = new AnotherClass();
 
-        /* constructing the MeReference */
+        /* Declaring/constructing the MeReference */
         MeReference<Integer, String> reference = new MeReference<>(executingObject,
                                                                    "addTwoNumbers",
                                                                    new Class[]{int.class, int.class});
+        /* Declaring another, for another method */
+        MeReference<Integer, String> reference1 = new MeReference<Integer, String>(executingObject,
+                                                                                   "numberToString",
+                                                                                   new Class[]{int.class});
         /* method passed as reference */
         anotherClassObj.processingMethod = reference;
 
         /* method 'pulls' the       method-reference       internally  on the other object */
         String recievedString = anotherClassObj.makesStringsWithNumbers(1, 2);
+
+        System.out.println(recievedString);
+
+
+        recievedString = reference1.run(1);
 
         System.out.println(recievedString);
     }
