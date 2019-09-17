@@ -1,6 +1,6 @@
 # MethodReferences
 
-MethodReferences allows you to pass methods along as references and to pack methods together to pass along.
+MethodReferences allow you to pass methods along as references and to pack methods together to pass along.
 
 Actually there are <b> MethodReferences, MethodPacks, MeReferences and MePacks </b>
 
