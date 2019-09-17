@@ -20,7 +20,7 @@ but that have low type-safety and limited capabilities when it comes to paramete
     * MethodReference
     * MethodPack
 
-Generic versions called:
+Are Generic versions are called:
 
     * MeReference<V,O>
     * MePack<V,O>
@@ -31,7 +31,7 @@ Generic versions called:
 
 * A new, less confusing example of a MeReference in action has been added (2017/09/17):
 
-      kcn.misc.MeReferencesPatternExample           
+      kcn.misc.MeReferencePatternExample           
 
 
 # Short Explanation
