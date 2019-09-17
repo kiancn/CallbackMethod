@@ -55,16 +55,16 @@ What you do to make a MeReference is to write:
                                                              "methodName",
                                                              new Class[]{int.class});
                              
-You can then pass it around like the field it is,
+You can then pass it around like the reference it is,
 and access the method by typing:
 
     reference.run( 42 );
     
-or even
+or even pass it as a parameter:
 
     someMethod(reference);
-    
-( ... and yes, of course you can use the return value ...)
+
+<i>( ... and yes, of course you can use the return value ...)</i>
 
 
 <B>It very much works!</B>
