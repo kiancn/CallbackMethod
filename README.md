@@ -17,5 +17,6 @@ Generic versions called:
 * MeReference<V,O>
 * MePack<V,O>
 
-The files themselves are heavily commented and a small set of test-scenarios 
-is included in the package.
+# Notice
+* The files themselves are heavily commented 
+* and a small set of test-scenarios is included in the package (and prepared for you in Main).
