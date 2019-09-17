@@ -8,7 +8,7 @@ Actually there are <b> MethodReferences, MethodPacks, MeReferences and MePacks <
 * The MeReferences and MePacks can do what the non-generics do, but have a degree of type-safety and allow 
   many complex task types.
 
--- This description will grow into an introduction. 2019/09/17 --
+    -- This description will grow into an introduction. 2019/09/17 --
 
 <I>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
 
@@ -26,12 +26,13 @@ Generic versions called:
     * MePack<V,O>
 
 # Notice
-* The files themselves are heavily commented 
+* All files are heavily commented ( except when they aren't yet ).
 * A small set of test-scenarios is included in the package (and prepared for you in Main).
-* A new, less confusing example of a MeReference in action has been added:
+
+* A new, less confusing example of a MeReference in action has been added (2017/09/17):
 
       kcn.misc.MeReferencesPatternExample           
-* It is heavily commented.
+
 
 # Short Explanation
 # A basic basic pattern of MeReferences 
@@ -69,7 +70,7 @@ and access the method by typing:
 
 <B>It very much works!</B>
 - it also very much has issues; 
-  * in MeReference the constructors have been tested seperately, and so have every other part: but it is difficult to figure out exactly how to use the different features together; so I'll make something up and make the existing better.  
+  * The constructors and methods have been tested against some case but but all ny a long shot: but it is difficult to figure out exactly how to use the different features together - without having see examples; so I'll make something up and make the existing better.  
 
 Finishing up: 
 * I hope the tests referenced in main Main are readable and comprehensible. <b> Please look at the new example first </b>
@@ -78,7 +79,7 @@ Finishing up:
 
 
 
-This is a proof of concept version and many possible features are missing.
+This is a proof of concept version and many possible features are missing. <i> Please inspire me </i>
 
 * try it out, it's pretty neat!
 * please comment: all experiences are welcome, even if you just need to shout
