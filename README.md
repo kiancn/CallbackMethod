@@ -4,7 +4,7 @@ MethodReferences allows you to pass methods along as references and to pack meth
 
 -- This description will grow into an introduction. 2019/09/17 --
 
-<I>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)<i/>
+<I>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
 
 There are two versions and two do work together.
 
