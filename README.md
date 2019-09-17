@@ -51,14 +51,14 @@ What you do to make a MeReference is to write:
 
     ImportantClass executingObject = new ImportantClass();
 
-    MeReference<Integer,String> reference = new MeReference<>(instanceClass,
+    MeReference<Integer,String> reference = new MeReference<>(executingObject,
                                                              "methodName",
                                                              new Class[]{int.class});
                              
 You can then pass it around like the field it is,
 and access the method by typing:
 
-    reference.run('input int');
+    reference.run( 42 );
     
 or even
 
