@@ -4,8 +4,6 @@ import kcn.datastructures.MePack;
 import kcn.datastructures.MeReference;
 import kcn.datastructures.MethodPack;
 import kcn.datastructures.MethodReference;
-import kcn.datatypes.Float2D;
-import kcn.datatypes.Int2D;
 import kcn.utility.TO;
 
 import java.lang.reflect.InvocationTargetException;
@@ -43,7 +41,9 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    /** Testing the non-generic version of MethodReferences and MethodPacks */
+    /**
+     * Testing the non-generic version of MethodReferences and MethodPacks
+     */
     public void test0_NonGenericMethodReference() throws
                                                   NoSuchMethodException,
                                                   InvocationTargetException,
@@ -331,9 +331,7 @@ public class ExamplesOfMethodReferencing_A
 
         /* 1 of 3 methodreferences (that will be passed) */
         MeReference<String, String> meRef_Q;
-        meRef_Q = new MeReference<>(objectWithMethodsA,
-                                    "printMessage1",
-                                    parameterClasses);
+        meRef_Q = new MeReference<>(objectWithMethodsA, "printMessage1", parameterClasses);
 
         /* 2 of 3 methodreferences (that will be passed) */
         MeReference<String, String> meRef_QQ;
@@ -343,19 +341,22 @@ public class ExamplesOfMethodReferencing_A
         MeReference<String, String> meRef_QQQ;
         meRef_QQQ = new MeReference<>(objectWithMethodsC, "printMessage3", parameterClasses);
 
-        /* */
-
+        /* adding MeRefs: order makes a difference - first in first out*/
+        aMePack.add(meRef_Q);
         aMePack.add(meRef_QQ);
         aMePack.add(meRef_QQQ);
-        aMePack.add(meRef_Q);
 
-        /* and an object to recieve and process the MeRefs*/
+
+        /* and an object to receive and process the MeRefs*/
         ExampleMethodsClass_B exB = new ExampleMethodsClass_B();
 
+        /* sending method pack */
         exB.clientMethods = aMePack;
+
+        /* supplying string-array (example specific of course)*/
         exB.stringArray = stringsToMessWith.clone();
 
-
+        /* processing string arrays supplied with methods supplied */
         exB.processStringArray();
 
     }

@@ -4,9 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/** Class instances are able to hold and pass around method-references */
 public class MePack<V, O>
-
 {
     private List<MeReference<V, O>> methods;
     private boolean automaticNullChecks; /* value of boolean effects all run method*/
@@ -47,19 +46,19 @@ public class MePack<V, O>
             method.run ();
         }
     }
-//
-//        /**
-//         * Method executes a collection of single <T> parameter and <T> retun type.
-//         */
-//        public <T> void run(T value) throws InvocationTargetException, IllegalAccessException
-//        {
-//            if (automaticNullChecks) { handleNullReferences (); }
-//
-//            for(MethodReferenceGeneric<V,O> method : methods)
-//            {
-//                method.run ( value );
-//            }
-//        }
+
+        /**
+         * Method executes a collection of single <T> parameter and <T> retun type.
+         */
+        public <T> void run_void(T value) throws InvocationTargetException, IllegalAccessException
+        {
+            if (automaticNullChecks) { handleNullReferences (); }
+
+            for(MeReference<V,O> method : methods)
+            {
+                method.run((V)value);
+            }
+        }
 
 
         /**

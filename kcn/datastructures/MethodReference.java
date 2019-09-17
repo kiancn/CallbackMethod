@@ -7,12 +7,12 @@ import java.lang.reflect.Method;
 /**
  * Class instances hold a reference to *a method and an object* and is able to execute that method
  * on that object from anywhere
- * The Reference has a generic twin in MethodReferenceGeneric
+ * The Reference has a generic twin in MeReference, which is safer to use and has much greater
+ * flexibility.
  */
 public class MethodReference
         implements IMethodReference
 {
-
     Object objectToExecuteMethodOn;
     private Method methodToExecute;
 
@@ -29,7 +29,7 @@ public class MethodReference
     public MethodReference(Object executingThing, String methodName) throws
                                                                      NoSuchMethodException
     {
-        methodToExecute = executingThing.getClass ().getMethod ( methodName );
+        methodToExecute = executingThing.getClass().getMethod(methodName);
         objectToExecuteMethodOn = executingThing;
     }
 
@@ -42,11 +42,9 @@ public class MethodReference
      * - no parameters
      * - returns void
      **/
-    public void run() throws
-                      InvocationTargetException,
-                      IllegalAccessException
+    public void run() throws InvocationTargetException, IllegalAccessException
     {
-        methodToExecute.invoke ( objectToExecuteMethodOn );
+        methodToExecute.invoke(objectToExecuteMethodOn);
     }
 
     /**
@@ -54,11 +52,9 @@ public class MethodReference
      *
      * @param inputParameter object type T whose value will be used as parameter when executing referenced method.
      **/
-    public <T> void run(T inputParameter) throws
-                                          InvocationTargetException,
-                                          IllegalAccessException
+    public <T> void run(T inputParameter) throws InvocationTargetException, IllegalAccessException
     {
-        methodToExecute.invoke ( objectToExecuteMethodOn, inputParameter );
+        methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
     }
 
     /**
@@ -68,12 +64,10 @@ public class MethodReference
      *
      * @param inputParameter object type T whose value will be used as parameter when executing referenced method.
      **/
-    public <T> T runWithReturn(T inputParameter) throws
-                                                 InvocationTargetException,
-                                                 IllegalAccessException
+    public <T> T runWithReturn(T inputParameter) throws InvocationTargetException, IllegalAccessException
 
     {
-        return (T) methodToExecute.invoke ( objectToExecuteMethodOn, inputParameter );
+        return (T)methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
     }
 
     /**
@@ -87,7 +81,7 @@ public class MethodReference
                                                                          InvocationTargetException,
                                                                          IllegalAccessException
     {
-        return (U) methodToExecute.invoke ( objectToExecuteMethodOn, inputParameter );
+        return (U)methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
     }
 
     @Override

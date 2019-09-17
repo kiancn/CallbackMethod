@@ -3,21 +3,31 @@ package kcn.datastructures;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/* Should this class be called MethodReferenceGeneric or GMR or GeMeRef or GMeRef or  */
+/* Should this class be called MethodReferenceGeneric or GMR or GeMeRef or GMeRef or ?
+ *  */
 
+/**
+ * A MeReference let you roll up a reference to an object and a method;
+ * and pass that method around and execute it from anywhere on command.
+ * <p>
+ * - features:
+ * * generic type V is used input-parameters             (Values)
+ * * generic type O is generally used as return type     (Output)
+ * <p>
+ * * Object type is here to allow manual type casting and great flexibility
+ **/
 public class MeReference<V, O>
         implements IMethodReference
 {
     /* ~<>~ Fields ~<>~ */
 
-    private boolean autoHandleNullObject;
-    private boolean shortCircuitRun;
-    private Object objectReference;
-    private Method method;
-    private Class[] argClasses;
+    private boolean autoHandleNullObject;/* if true referenced object is null-checked every execution */
+    private boolean shortCircuitRun; /* bool used in all 'run' methods for avoiding fatal missing references*/
+    private Object objectReference; /* reference to the Object that executes the method (must own method) */
+    private Method method; /* reference to instance of Method class, contents supplied at construction time */
+    private Class[] argClasses; /* if a MeRef */
 
     /* ~<>~ Constructors ~<>~ */
-
 
     public MeReference(Object executingObject, Method methodThatWillBeExecuted)
     {
@@ -26,17 +36,15 @@ public class MeReference<V, O>
         autoHandleNullObject = true; /* safety by default */
     }
 
-    public MeReference(Object executingObject, String methodName) throws
-                                                                             NoSuchMethodException
+    public MeReference(Object executingObject, String methodName) throws NoSuchMethodException
     {
         objectReference = executingObject;
         method = executingObject.getClass().getMethod(methodName);
         autoHandleNullObject = true; /* safety by default */
     }
 
-    /* probably the preferable constructor */
     public MeReference(Object executingObject, String methodName, Class[] varargClasses) throws
-                                                                                                    NoSuchMethodException
+                                                                                         NoSuchMethodException
     {
         argClasses = varargClasses;
         objectReference = executingObject;
@@ -46,7 +54,7 @@ public class MeReference<V, O>
     }
 
     public MeReference(Object executingObject, String methodName, boolean handleNullObject) throws
-                                                                                                       NoSuchMethodException
+                                                                                            NoSuchMethodException
     {
         objectReference = executingObject;
         method = executingObject.getClass().getMethod(methodName);
@@ -65,11 +73,8 @@ public class MeReference<V, O>
     /**
      * Method executes supplied method with no parameters and a type O return
      */
-    @SuppressWarnings("unchecked") /* compiler is unsure of return type, but we
-     know from construction time */
-    public O run() throws
-                   InvocationTargetException,
-                   IllegalAccessException
+    @SuppressWarnings("unchecked") /* compiler is unsure of return type, but we  know from construction time */
+    public O run() throws InvocationTargetException, IllegalAccessException
     {
 
         if(autoHandleNullObject){ isObjectNull(); }
@@ -86,9 +91,7 @@ public class MeReference<V, O>
      * and returns a type O object.
      **/
     @SuppressWarnings("unchecked") /* same (see O run() )*/
-    public O run(V vValue) throws
-                           InvocationTargetException,
-                           IllegalAccessException
+    public O run(V vValue) throws InvocationTargetException, IllegalAccessException
     {
 
         if(autoHandleNullObject){ isObjectNull(); }
@@ -105,9 +108,7 @@ public class MeReference<V, O>
      * and returns a type O object.
      **/
     @SuppressWarnings("unchecked") /* same (see run() )*/
-    public O run_VV(V vValueA, V vValueB) throws
-                                       InvocationTargetException,
-                                       IllegalAccessException
+    public O run_VV(V vValueA, V vValueB) throws InvocationTargetException, IllegalAccessException
     {
 
         if(autoHandleNullObject){ isObjectNull(); }
@@ -115,7 +116,6 @@ public class MeReference<V, O>
         {
             return (O)method.invoke(objectReference, vValueA, vValueB);
         }
-
         /* null returns are passed */
         return null;
     }
@@ -129,9 +129,7 @@ public class MeReference<V, O>
      * @return object of type O
      **/
     @SuppressWarnings("unchecked")
-    public O run(V[] valuesArray) throws
-                                  InvocationTargetException,
-                                  IllegalAccessException
+    public O run(V[] valuesArray) throws InvocationTargetException, IllegalAccessException
     {
 
         if(autoHandleNullObject){ isObjectNull(); }
@@ -147,13 +145,14 @@ public class MeReference<V, O>
     /**
      * Method takes a Object-object and a V-object as arguments, and returns an
      * O-type object. (M..R..G.. <V,O>)
-     * <p></p><p> - method takes first an object of type Object
-     * <p> - then method takes an object type V
+     * <p></p><p> - method takes first a parameter object of type Object
+     * <p> - then method takes a parameter object type V
      * <p> - method returns a type O object
-     * <p></p>
+     * <p>
      * <b> - NB. the contained method must take care to cast the Object to
      * something useful.* </b>
-     * <p>  - Method is named different because the compiler cannot distinguish between
+     * <p>
+     * - Method is named different because the compiler cannot distinguish between
      * run(V,V) and run(Object,V), - and so run_ObjV was born.
      * Sorry for the confusion. </p>
      *
@@ -162,11 +161,8 @@ public class MeReference<V, O>
      * @param value       an object of type V
      * @return an O-type object
      */
-    @SuppressWarnings("unchecked") /* compiler is unsure of return type, but we
-     know from construction time */
-    public O run_ObjV(Object inputObject, V value) throws
-                                                   InvocationTargetException,
-                                                   IllegalAccessException
+    @SuppressWarnings("unchecked") /* same (see run() )*/
+    public O run_ObjV(Object inputObject, V value) throws InvocationTargetException, IllegalAccessException
     {
         /* if autoHandle.. is true, check if object is null*/
         if(autoHandleNullObject){isObjectNull();}
@@ -194,12 +190,9 @@ public class MeReference<V, O>
      * @param valuesArray an array of type V objects.
      * @return object of type O
      **/
-    @SuppressWarnings("unchecked")
-    public O run(Object inputObject, V[] valuesArray) throws
-                                                      InvocationTargetException,
-                                                      IllegalAccessException
+    @SuppressWarnings("unchecked") /* same (see run() )*/
+    public O run(Object inputObject, V[] valuesArray) throws InvocationTargetException, IllegalAccessException
     {
-
         if(autoHandleNullObject){ isObjectNull(); }
 
         if(!shortCircuitRun)
@@ -212,11 +205,10 @@ public class MeReference<V, O>
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public Object run(O inputTypeO, V inputTypeV) throws
-                                                  InvocationTargetException,
-                                                  IllegalAccessException
-    {   /* if autohandling null object, do that*/
+    //    @SuppressWarnings("unchecked")
+    public Object run(O inputTypeO, V inputTypeV) throws InvocationTargetException, IllegalAccessException
+    {
+        /* if autohandling null object, do that*/
         if(autoHandleNullObject){ isObjectNull(); }
 
         if(!shortCircuitRun)
@@ -227,8 +219,8 @@ public class MeReference<V, O>
     }
 
     /**
-     * Method returns true if executing object is null,
-     * & switches shortCircuitRun to avoid fatal errors if object IS null.
+     * Method returns true if executing object is null;
+     * & switches shortCircuitRun to true to avoid fatal errors if object IS null.
      **/
     public boolean isObjectNull()
     {
@@ -246,6 +238,8 @@ public class MeReference<V, O>
     @Override
     public Method getMethodToExecute(){ return method; }
 
+    public Object getExecutingObjectUnsafe(){ return objectReference; }
+
     @Override
     public Object getExecutingObject()
     {
@@ -258,13 +252,9 @@ public class MeReference<V, O>
         }
     }
 
-    public Object getExecutingObjectUnsafe(){ return objectReference; }
 
     public void setParameterClasses(Class[] classes){ argClasses = classes.clone(); }
 
-    public void destoyMethodReference(){
-
-    }
 }
 /*
  * This saved my life as to how to supply the array of V to invoke in run(V[]) :

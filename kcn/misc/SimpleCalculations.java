@@ -1,7 +1,5 @@
 package kcn.misc;
 
-import kcn.datatypes.Int2D;
-
 public class SimpleCalculations
 {
     public void NumberSquared(int number)

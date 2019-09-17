@@ -1,8 +1,6 @@
 package kcn.misc;
 
 import kcn.datastructures.MeReference;
-import kcn.datatypes.Float2D;
-import kcn.datatypes.Int2D;
 import kcn.utility.TO;
 
 import java.lang.reflect.InvocationTargetException;
