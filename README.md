@@ -1,22 +1,29 @@
-# MethodReferences, MethodPacks
- & MeReferences and MePacks
+# MethodReferences
+
 MethodReferences allows you to pass methods along as references and to pack methods together to pass along.
+
+Actually there are <b> MethodReferences, MethodPacks, MeReferences and MePacks </b>
+
+* The MethodReferences and MethodPack are non-generic types and are ideal for simpler signalling tasks.
+* The MeReferences and MePacks can do what the non-generics do, but have a degree of type-safety and allow 
+  many complex task types.
 
 -- This description will grow into an introduction. 2019/09/17 --
 
 <I>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
 
-There are two versions and two do work together.
+The generic and the non-generic types do not mingle atm. 
 
 There are non-generic versions that are very easy to pass around;
 but that have low type-safety and limited capabilities when it comes to parameters
 
-* MethodReference
-* MethodPack
+    * MethodReference
+    * MethodPack
 
 Generic versions called:
-* MeReference<V,O>
-* MePack<V,O>
+
+    * MeReference<V,O>
+    * MePack<V,O>
 
 # Notice
 * The files themselves are heavily commented 
@@ -65,7 +72,7 @@ or even
   * in MeReference the constructors have been tested seperately, and so have every other part: but it is difficult to figure out exactly how to use the different features together; so I'll make something up and make the existing better.  
 
 Finishing up: 
-* I hope the tests referenced in main Main are readable and comprehensible. <b> Please look at the new example first <b>
+* I hope the tests referenced in main Main are readable and comprehensible. <b> Please look at the new example first </b>
   
 * I apologize for using custom wrapper classes in the examples (two 2d coordinate types and a Matrix class... they'll be standardized at some date.).
 
