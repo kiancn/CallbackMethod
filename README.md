@@ -1,14 +1,16 @@
-# MethodReferences
+# Method References
+    package kcn.methodreferencing
 
+In short:
 MethodReferences and MeRefs allow you to pass methods along as references and to pack methods together to pass along.
 
-Actually there are <b> MethodReferences, MethodPacks, MeReferences and MePacks </b>
+Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
 
 * The MethodReferences and MethodPack are non-generic types and are ideal for simpler signalling tasks.
-* The MeReferences and MePacks can do what the non-generics do, and have a degree of type-safety and allow 
+* The MeRefs and MePacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
   many complex task types.
 
-    -- This description will grow into an introduction. 2019/09/17 --
+    -- This will grow into a proper introduction. 2019/09/17 --
     
       <i>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
       <I>Project v0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
@@ -39,6 +41,7 @@ Personally I like the generics much better, but both versions work fine.
 
       kcn.misc.MeReferencePatternExample           
 
+* I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
 
 # Short Explanation
 # A basic basic pattern to start using a MeRef<V,O>
