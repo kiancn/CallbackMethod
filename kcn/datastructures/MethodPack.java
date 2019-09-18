@@ -26,7 +26,7 @@ public class MethodPack
 
     public MethodPack()
     {
-        this.methods = new ArrayList<MethodReference> ();
+        this.methods = new ArrayList<MethodReference>();
     }
 
     public List<MethodReference> getMethods()
@@ -38,69 +38,75 @@ public class MethodPack
      * Method executes a collection of no-parameter, no/void return type methods.
      * Actually, it is run() on each MethodReference in methods that is executed...
      **/
-    public void run() throws
-                      InvocationTargetException,
-                      IllegalAccessException
+    public void run()
     {
-        if (automaticNullChecks) { handleNullReferences (); }
-
-        for(MethodReference method : methods){ method.run (); }
-    }
-
-    /**
-     * Method executes a collection of single <V> parameter and <V> retun type.
-     */
-    public <V> void run(V value) throws
-                                 InvocationTargetException,
-                                 IllegalAccessException
-    {
-        if (automaticNullChecks) { handleNullReferences (); }
+        if(automaticNullChecks){ handleNullReferences(); }
 
         for(MethodReference method : methods)
         {
-            method.run ( value );
+
+            method.run();
+        }
+    }
+
+    /**
+     * Method executes a collection of single <V> parameter and <V> return type.
+     */
+    public <V> void run(V value)
+    {
+        if(automaticNullChecks){ handleNullReferences(); }
+
+        for(MethodReference method : methods)
+        {
+            method.run_paramT_reObj(value);
         }
     }
 
 
     /**
-     * Method executes all method on it's list in supplied order:
-     * - takes two parameters
-     * - a parameter of type <V> that is supplied as a parameter to all methods-list classes.
-     * ** The value of parameter is used.
-     * - a parameter of type <O> that is used solely for defining the *return type*
-     * ** The value of parameter is discarded.
-     * - NB. if methods ends up not returning any method, the supplied object will be returned! (returnClassObject)
-     **/
-    public <V, O> O run(V value, O returnClassObject) throws
+     * Method executes all MethodReferences on it's list in supplied orders
+     *  - Method supplied must:
+     *  - take two parameters, can be of different types types;
+     *  - return an Object.
+     */
+    public <V, O> Object run(V value, O returnClassObject) throws
                                                       InvocationTargetException,
                                                       IllegalAccessException
     {
-        if (automaticNullChecks) { handleNullReferences (); }
+        if(automaticNullChecks){ handleNullReferences(); }
 
         for(MethodReference method : methods)
         {
-            return method.runWithReturn ( value, returnClassObject );
+            return method.run_paramTU_reObj(value, returnClassObject);
         }
 
         return returnClassObject;
     }
-    /** Method adds a MethodReference object to internal list **/
+
+    /**
+     * Method adds a MethodReference object to internal list
+     **/
     public boolean add(MethodReference method)
     {
-        methods.add ( method );
+        methods.add(method);
         return true;
     }
-    /** Method adds a MethodReference object to internal list **/
+
+    /**
+     * Method adds a MethodReference object to internal list
+     **/
     public boolean remove(MethodReference method)
     {
-        if (methods.contains ( method ))
+        if(methods.contains(method))
         {
-            methods.remove ( method );
+            methods.remove(method);
             return true;
         } else return false;
     }
-    /**Method */
+
+    /**
+     * Method
+     */
     public void autoHandleNullReferences(boolean turnOnAutomaticHandlingOfNullObjects)
     {
         automaticNullChecks = turnOnAutomaticHandlingOfNullObjects;
@@ -113,16 +119,16 @@ public class MethodPack
     {
         for(MethodReference mr : methods)
         {
-            if (mr.getExecutingObject () == null)
+            if(mr.getExecutingObject() == null)
             {
-                methods.remove ( mr );
+                methods.remove(mr);
             }
         }
     }
 
     public int length()
     {
-        return methods.size ();
+        return methods.size();
     }
 
 }

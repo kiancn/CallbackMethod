@@ -7,42 +7,39 @@ import java.util.List;
 /** Class instances are able to hold and pass around method-references */
 public class MePack<V, O>
 {
-    private List<MeReference<V, O>> methods;
+    private List<MeRef<V, O>> methods;
     private boolean automaticNullChecks; /* value of boolean effects all run method*/
 
     /* Unprimed Constructor; V and O are given, but no methods*/
     public MePack()
     {
-        this.methods = new ArrayList<MeReference<V, O>> ();
+        this.methods = new ArrayList<MeRef<V, O>> ();
     }
 
     /* Unprimed Constructor; V and O are given, and so is an no methods.
      *
      * *-* using List because any kind of List should work */
-    public MePack(List<MeReference<V, O>> methodReferences)
+    public MePack(List<MeRef<V, O>> methodReferences)
     {
-        this.methods = new ArrayList<MeReference<V, O>> ();
+        this.methods = new ArrayList<MeRef<V, O>> ();
         methods.addAll ( methodReferences );
     }
 
-    public List<MeReference<V, O>> getMethods()
+    public List<MeRef<V, O>> getMeRefs()
     {
         return methods;
     }
 
     /**
-     * Method executes a collection of no-parameter, O-type return type methods.
-     * Actually, it is run() on each MethodReferenceGeneric-object in methods that
-     * is
-     * executed...
+     * Method executes run() on each MeRef in methods List
+     * <p></p>Method nescessitates that zero parameter, void return type methods are referenced supplied.
+     *  <p></p>* using a MeRef with the signature:   MeRef<>   is ideal for this purpose..
      **/
-    public void run() throws
-                      InvocationTargetException,
-                      IllegalAccessException
+    public void run()
     {
         if (automaticNullChecks) { handleNullReferences (); }
 
-        for(MeReference<V, O> method : methods){
+        for(MeRef<V, O> method : methods){
             method.run ();
         }
     }
@@ -50,13 +47,13 @@ public class MePack<V, O>
         /**
          * Method executes a collection of single <T> parameter and <T> retun type.
          */
-        public <T> void run_void(T value) throws InvocationTargetException, IllegalAccessException
+        public <T> void run_void(T value)
         {
             if (automaticNullChecks) { handleNullReferences (); }
 
-            for(MeReference<V,O> method : methods)
+            for(MeRef<V,O> method : methods)
             {
-                method.run((V)value);
+                method.run((V)value); /* it is possible that null will be passed here */
             }
         }
 
@@ -74,7 +71,7 @@ public class MePack<V, O>
         {
             if (automaticNullChecks) { handleNullReferences (); }
 
-            for(MeReference<V,O> method : methods)
+            for(MeRef<V,O> method : methods)
             {
                 return method.run( value);
             }
@@ -83,14 +80,14 @@ public class MePack<V, O>
         }
 
 
-    public boolean add(MeReference<V, O> method)
+    public boolean add(MeRef<V, O> method)
     {
         methods.add ( method );
         return true;
     }
 
 
-    public boolean remove(MeReference<V, O> method)
+    public boolean remove(MeRef<V, O> method)
     {
         if (methods.contains ( method ))
         {
@@ -112,7 +109,7 @@ public class MePack<V, O>
 
     public void handleNullReferences()
     {
-        for(MeReference<V, O> mr : methods)
+        for(MeRef<V, O> mr : methods)
         {
             if (mr.getExecutingObject () == null)
             {

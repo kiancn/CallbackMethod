@@ -1,6 +1,6 @@
 package kcn.misc.MeReferencePatternExample;
 
-import kcn.datastructures.MeReference;
+import kcn.datastructures.MeRef;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -21,13 +21,13 @@ public class ExampleMain
         AnotherClass anotherClassObj = new AnotherClass();
 
         /* Declaring/constructing the MeReference */
-        MeReference<Integer, String> reference = new MeReference<>(executingObject,
-                                                                   "addTwoNumbers",
-                                                                   new Class[]{int.class, int.class});
+        MeRef<Integer, String> reference = new MeRef<>(executingObject,
+                                                       "addTwoNumbers",
+                                                       new Class[]{int.class, int.class});
         /* Declaring another, for another method */
-        MeReference<Integer, String> reference1 = new MeReference<Integer, String>(executingObject,
-                                                                                   "numberToString",
-                                                                                   new Class[]{int.class});
+        MeRef<Integer, String> reference1 = new MeRef<Integer, String>(executingObject,
+                                                                       "numberToString",
+                                                                       new Class[]{int.class});
         /* method passed as reference */
         anotherClassObj.processingMethod = reference;
 

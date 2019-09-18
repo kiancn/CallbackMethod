@@ -18,16 +18,19 @@ public class Main
          *      - just MeReferences (generic)
          */
 
+        /* These examples are not optimal for clarity, I think: and recommend starting with the
+        MeReferencePatternExample;
+        * It has it's own main. */
         var examples = new ExamplesOfMethodReferencing_A();
 
-//        examples.test0_NonGenericMethodReference();
-//
-//        examples.test1MeReferenceWith2parametersVV_returnsO();
-//        examples.test2MeReferenceWith2ParametersVV_returnsO();
-//        examples.test3MeReferenceWith2ParametersVV_OReturn();
-//        examples.test4MeReferenceWith2ParametersVV_ArrayReturn();
-//        examples.test5_runObjV();
-//        examples.test6();
+//        examples.test0_NonGenericMethodReference(); /* it works fine but takes time to execute */
+
+        examples.test1MeReferenceWith2parametersVV_returnsO(); /**/
+        examples.test2MeReferenceWith2ParametersVV_returnsO();
+        examples.test3MeReferenceWith2ParametersVV_OReturn();
+        examples.test4MeReferenceWith2ParametersVV_ArrayReturn();
+        examples.test5_runObjV();
+        examples.test6_MePackRunningSomeMeRefs();
 //
         examples.test7PassingMePacksAround();
 

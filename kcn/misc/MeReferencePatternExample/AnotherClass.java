@@ -1,12 +1,12 @@
 package kcn.misc.MeReferencePatternExample;
 
-import kcn.datastructures.MeReference;
+import kcn.datastructures.MeRef;
 
 import java.lang.reflect.InvocationTargetException;
 
 class AnotherClass
 {
-    MeReference<Integer, String> processingMethod;
+    MeRef<Integer, String> processingMethod;
 
     public String makesStringsWithNumbers(int number, int numb) throws
                                                                 InvocationTargetException,

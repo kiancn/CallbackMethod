@@ -1,7 +1,7 @@
 package kcn.misc;
 
 import kcn.datastructures.MePack;
-import kcn.datastructures.MeReference;
+import kcn.datastructures.MeRef;
 import kcn.datastructures.MethodPack;
 import kcn.datastructures.MethodReference;
 import kcn.utility.TO;
@@ -10,8 +10,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+ /* I accept the throws for readability; and the stack-trace is nice for direct debugging anyway
+ * All possible exceptions in the MethodReferences and MeRefs are handled internally, also in MethodPack,
+ * not yet in MePack */
+
 /**
- * All these examples look/are bloated because the MeReferences and MePacks need to material to work on
+ * I apologize for confusing tests and rather random example material. Later examples are better IMO.
+ * I'll build template examples for all configurations ASP (at some point )
+ *
  */
 
 public class ExamplesOfMethodReferencing_A
@@ -35,7 +41,7 @@ public class ExamplesOfMethodReferencing_A
 
         test5_runObjV();
 
-        test6();
+        test6_MePackRunningSomeMeRefs();
 
         test7PassingMePacksAround();
 
@@ -44,10 +50,7 @@ public class ExamplesOfMethodReferencing_A
     /**
      * Testing the non-generic version of MethodReferences and MethodPacks
      */
-    public void test0_NonGenericMethodReference() throws
-                                                  NoSuchMethodException,
-                                                  InvocationTargetException,
-                                                  IllegalAccessException
+    public void test0_NonGenericMethodReference() throws NoSuchMethodException
     {
         CharMatrix matrix3 = new CharMatrix(TO.blue("¤"), 5);
 
@@ -78,7 +81,7 @@ public class ExamplesOfMethodReferencing_A
         MethodReference abs = new MethodReference(sc, sc.getClass().getMethod("NumberAbsolute", int.class));
 
         /* running a single MethodReference with parameter and no return type */
-        square.run(5000);
+        square.run_paramT_reObj(5000);
 
         /* Testing MethodPack with MethodReferences w no return ( .returnResult )*/
         MethodPack mp = new MethodPack();
@@ -91,34 +94,32 @@ public class ExamplesOfMethodReferencing_A
         /* Any kind of object can be passed to returnResult; but return type of wrapped method must match parameter type */
         MethodPack stringMethods = new MethodPack();
         MethodReference stringMethod = new MethodReference(sc, sc.getClass().getMethod("returnString", String.class));
-        System.out.println(stringMethod.runWithReturn("Abracadrabra"));
+        System.out.println(stringMethod.run_paramT_reT("Abracadrabra"));
 
     }
 
     /* Testing MethodReferenceGeneric where 'run method' requires two parameters and has a return */
     public void test1MeReferenceWith2parametersVV_returnsO() throws
-                                                             NoSuchMethodException,
-                                                             InvocationTargetException,
-                                                             IllegalAccessException
+                                                             NoSuchMethodException
     {
         /* An rather random object with an appropriate method available */
         SimpleCalculations calc = new SimpleCalculations();
 
-        /*
-         Three ways to achieve the same thing:
-         * In order of difficulty for user:
-         * The first (A) one is longer for the user AND equivalent internally to
-         * The second (B)shorter way, probably more useful
-         *  */
-
-        MeReference<Integer, Int2D> returnMethod;
+        /* declaring array or classes for use as argument in new MeRef object*/
         Class[] mPClasses = {int.class, int.class};
+
+
+        /* */
+        MeRef<Integer, Int2D> returnMethod;
+
+
+
         /* Technique A for giving method argument */
-        returnMethod = new MeReference<>(calc, calc.getClass().getMethod("makeIntCoordinate",
-                                                                         mPClasses));
+        returnMethod = new MeRef<>(calc, calc.getClass().getMethod("makeIntCoordinate",
+                                                                   mPClasses));
 
         /* Technique B for giving method argument: A & B are equivalent */
-        returnMethod = new MeReference<>(calc, "makeIntCoordinate", mPClasses);
+        returnMethod = new MeRef<>(calc, "makeIntCoordinate", mPClasses);
 
 
         /* ACTION! */
@@ -143,11 +144,11 @@ public class ExamplesOfMethodReferencing_A
     {
         SimpleCalculations calc = new SimpleCalculations();
 
-        MeReference<Integer, Int2D> returnMethod;
+        MeRef<Integer, Int2D> returnMethod;
 
         /* notice the way (type class) parameters after 'name' are listed vs. in test1 */
-        returnMethod = new MeReference<>(calc, calc.getClass().getMethod("makeIntCoordinate",
-                                                                         int.class, int.class));
+        returnMethod = new MeRef<>(calc, calc.getClass().getMethod("makeIntCoordinate",
+                                                                   int.class, int.class));
 
         /* MethodReference passed as an argument in a method */
         ExampleMethodsClass_A arbi = new ExampleMethodsClass_A();
@@ -165,10 +166,10 @@ public class ExamplesOfMethodReferencing_A
 
         SimpleCalculations calc = new SimpleCalculations();
 
-        MeReference<Integer, Int2D> returnMethod;
+        MeRef<Integer, Int2D> returnMethod;
 
-        returnMethod = new MeReference<>(calc, calc.getClass().getMethod("makeIntCoordinate",
-                                                                         new Class[]{int.class, int.class}));
+        returnMethod = new MeRef<>(calc, calc.getClass().getMethod("makeIntCoordinate",
+                                                                   new Class[]{int.class, int.class}));
 
         /* MethodReference passed as an argument in a method */
         ExampleMethodsClass_A arbi = new ExampleMethodsClass_A();
@@ -179,9 +180,7 @@ public class ExamplesOfMethodReferencing_A
     }
 
     public void test4MeReferenceWith2ParametersVV_ArrayReturn() throws
-                                                                NoSuchMethodException,
-                                                                InvocationTargetException,
-                                                                IllegalAccessException
+                                                                NoSuchMethodException
     {
         /* Testing MethodReferenceGeneric with array return type og <>   */
         SimpleCalculations calc = new SimpleCalculations();
@@ -198,7 +197,7 @@ public class ExamplesOfMethodReferencing_A
 
         Method iCMethod = calc.getClass().getMethod("coordinateMean", iCoordsArrayClass);
 
-        var iCArrayMethodReference = new MeReference<>(calc, iCMethod);
+        var iCArrayMethodReference = new MeRef<>(calc, iCMethod);
         // this is like magic to me, notice the empty <> - gives <Object,Object>
 
 
@@ -207,8 +206,7 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    public void test5_runObjV() throws NoSuchMethodException, InvocationTargetException,
-                                       IllegalAccessException
+    public void test5_runObjV() throws NoSuchMethodException
     {
         /*
          * Testing run_ObjV(Object.. V...);
@@ -234,11 +232,11 @@ public class ExamplesOfMethodReferencing_A
         Method giveFloatCoordinateMethod = testObject.getClass().getMethod("giveFloatCoordinate", argClasses);
 
         /* Declaring the actual method reference; supplying the argClasses  */
-        var giveFCoordMeRef = new MeReference<Int2D, Float2D>(testObject, "giveFloatCoordinate", argClasses);
+        var giveFCoordMeRef = new MeRef<Int2D, Float2D>(testObject, "giveFloatCoordinate", argClasses);
 
         /* This is NOT nessecary; I'm simply showing the feature that the Method parameter can also be
          * fullly prepared; and that you therefore can used a different constructor */
-        giveFCoordMeRef = new MeReference<>(testObject, giveFloatCoordinateMethod);
+        giveFCoordMeRef = new MeRef<>(testObject, giveFloatCoordinateMethod);
 
 
         /* Preparing an Object; parameter in referenced method. RANDOM EX */
@@ -257,7 +255,8 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    public void test6() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException
+    public void test6_MePackRunningSomeMeRefs() throws
+                                                NoSuchMethodException
     {
         /*                                                                         */
         /* Testing generic method packs     */
@@ -267,13 +266,14 @@ public class ExamplesOfMethodReferencing_A
         /* Conjuring a testObject to perform tasks*/
         ExampleMethodsClass_A testObject = new ExampleMethodsClass_A();
 
-        /* fetch reference to the mehod, supplying the correct array of args */
+        /* fetch reference to the method, supplying the correct array of args */
         Method giveFCoordMeRef;
         giveFCoordMeRef = testObject.getClass().getMethod("giveFloatCoordinate", argClasses);
 
-        MeReference giveFloatCoordGMR = new MeReference<Int2D, Float2D>(testObject, giveFCoordMeRef);
+        /* Declaring/Constructing a new MeRef */
+        MeRef giveFloatCoordGMR = new MeRef<Int2D, Float2D>(testObject, giveFCoordMeRef);
 
-        /* Newing up a methodpack of supplied types*/
+        /* Newing up a methodpack of relevant types*/
         MePack<Int2D, Float2D> genPack = new MePack<>();
 
         /* Just an appropriate and random Object */
@@ -289,7 +289,7 @@ public class ExamplesOfMethodReferencing_A
 
 
         /* Making a list and putting all method references into it.*/
-        List<MeReference<Int2D, Float2D>> packOfMethods = genPack.getMethods();
+        List<MeRef<Int2D, Float2D>> packOfMethods = genPack.getMeRefs();
 
         /* Getting elements from same list  */
         for(int i = 0; i < packOfMethods.size(); i++)
@@ -300,12 +300,8 @@ public class ExamplesOfMethodReferencing_A
         }
     }
 
-    public void test7PassingMePacksAround() throws
-                                            InvocationTargetException,
-                                            IllegalAccessException,
-                                            NoSuchMethodException
+    public void test7PassingMePacksAround()
     {
-
         /* an array of strings to send and manipulate ... [Class/object is purely placeholder] */
         String[] stringsToMessWith = new String[]{
                 "Onki was a weird boy. Are you?",
@@ -330,16 +326,16 @@ public class ExamplesOfMethodReferencing_A
 
 
         /* 1 of 3 methodreferences (that will be passed) */
-        MeReference<String, String> meRef_Q;
-        meRef_Q = new MeReference<>(objectWithMethodsA, "printMessage1", parameterClasses);
+        MeRef<String, String> meRef_Q;
+        meRef_Q = new MeRef<>(objectWithMethodsA, "printMessage1", parameterClasses);
 
         /* 2 of 3 methodreferences (that will be passed) */
-        MeReference<String, String> meRef_QQ;
-        meRef_QQ = new MeReference<>(objectWithMethodsB, "printMessage2", parameterClasses);
+        MeRef<String, String> meRef_QQ;
+        meRef_QQ = new MeRef<>(objectWithMethodsB, "printMessage2", parameterClasses);
 
         /* 3 of 3 methodreferences (that will be passed) */
-        MeReference<String, String> meRef_QQQ;
-        meRef_QQQ = new MeReference<>(objectWithMethodsC, "printMessage3", parameterClasses);
+        MeRef<String, String> meRef_QQQ;
+        meRef_QQQ = new MeRef<>(objectWithMethodsC, "printMessage3", parameterClasses);
 
         /* adding MeRefs: order makes a difference - first in first out*/
         aMePack.add(meRef_Q);

@@ -1,11 +1,9 @@
 package kcn.misc.MeReferencePatternExample;
 
-
+/* just a class with two methods that have parameters and return types that fit the example */
 public class ClassWithMethodToPassAround
 {
 
-
-    /* this is the method that will be passed around */
     public String addTwoNumbers(int a, int b){
         return "" + a + " plus " + b + " is " + (a + b) + ".";
     }
