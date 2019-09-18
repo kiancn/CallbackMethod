@@ -1,7 +1,8 @@
 package kcn.misc;
 
-import kcn.datastructures.MeRef;
+import kcn.methodreferencing.MeRef;
 import kcn.utility.TO;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -27,7 +28,7 @@ public class ExampleMethodsClass_A
      * IS inferred and is utilized at call time :)
      * Also, the method is almost exactly useless.
      */
-    public void printSomething(MeRef<Integer, Int2D> methodReference, int a, int b) throws
+    public void printSomething(@NotNull MeRef<Integer, Int2D> methodReference, int a, int b) throws
                                                                                           InvocationTargetException,
                                                                                           IllegalAccessException
     {

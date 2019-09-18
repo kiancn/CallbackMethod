@@ -1,6 +1,6 @@
 package kcn.misc.MeReferencePatternExample;
 
-import kcn.datastructures.MeRef;
+import kcn.methodreferencing.MeRef;
 
 import java.lang.reflect.InvocationTargetException;
 

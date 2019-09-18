@@ -1,9 +1,9 @@
 package kcn.misc;
 
-import kcn.datastructures.MePack;
-import kcn.datastructures.MeRef;
-import kcn.datastructures.MethodPack;
-import kcn.datastructures.MethodReference;
+import kcn.methodreferencing.MePack;
+import kcn.methodreferencing.MeRef;
+import kcn.methodreferencing.MethodPack;
+import kcn.methodreferencing.MethodReference;
 import kcn.utility.TO;
 
 import java.lang.reflect.InvocationTargetException;

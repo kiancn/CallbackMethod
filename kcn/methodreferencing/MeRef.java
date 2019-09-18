@@ -1,4 +1,4 @@
-package kcn.datastructures;
+package kcn.methodreferencing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -1,6 +1,6 @@
 package kcn.misc;
 
-import kcn.datastructures.MePack;
+import kcn.methodreferencing.MePack;
 
 
 /* [Class/object is purely placeholder]

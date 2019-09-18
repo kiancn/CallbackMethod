@@ -1,4 +1,4 @@
-package kcn.datastructures;
+package kcn.methodreferencing;
 
 public interface IHoldMethodReference
 {
