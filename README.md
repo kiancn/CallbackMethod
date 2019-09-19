@@ -2,7 +2,7 @@
     package kcn.methodreferencing
 
 In short:
-MethodReferences and MeRefs allow you to pass methods along as references and to pack methods together to pass along.
+The Methodreferencing package allows you to pass methods along as references & to pack methods together to pass along.
 
 Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
 
