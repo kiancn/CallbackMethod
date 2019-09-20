@@ -60,28 +60,33 @@ and in that class there is a method with the following signature
 
     public String methodName (int number) { ... ... }
 
-What you do to make a MeReference is to write:
+
+Let's just say you get a reference to instance of that class like this:
 
     ImportantClass executingObject = new ImportantClass();
 
-You then declare a MeRef with appropriate signature ()
+
+
+You then declare a MeRef with appropriate signature 
+
     MeRef<Integer,String> reference = new MeRef<>(executingObject,
                                                    "methodName",
                                                    new Class[]{int.class});
 
 
-Now, if method was to take this MeRef as a parameter type, it'd migth look exactly like this:
-    void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... }
-                             
+Now, if a method was to take this MeRef as a parameter type, it might look exactly like this:
+
+    void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... } 
+ 
 You can then pass it the reference like so,
 
     someMethod(reference);
 
-and access the passed method : (like this in this case, there are a few run..()-methods)
+and access the passed method : (like this in this case, there are a few run..(..)-methods)
 
     reference.run( 42 );
 
-<i>( ... and yes, of course you can use the return value ... but I kept it simplified )</i>
+<i>( ... and yes, of course you can use the return value, as if executing the contained method directly )</i>
 
 
 <B>It very much works!</B>
@@ -105,11 +110,9 @@ This is a proof of concept version and many possible features are missing. <i> P
 
 
 
-# Next feature goals:
+# Pending goals:
 * Test features more rigidly
-* For MeReference: Automatic inference and checking of return type is possible at construction time because Method object comes with a .getReturnType method.
 * Optimizing invoke calls: The two Me(thod)Reference types use Reflection at construction time and at run time. The heavy lifting is done at construction time, then the references are there. However, at execution time (in all run() variants) the invoke-method is called on the referenced Method object, and that is about twice as heavy as a regular method call (http://www.jguru.com/faq/view.jsp?EID=246569): though it might be worth it because you can pass methods around like a freak, it is worth a closer look at the internals of the invoke-method.
-
+* For MeReference: Automatic inference and checking of return type is possible at construction time because Method object comes with a .getReturnType method.
 * Actual return type inference; but I think that will get a seperate set of types - because the existing works pretty well without the added rigidity/security. 
-
 * Make an introduction to each feature of the classes (and possibly define a set of best practices...).
