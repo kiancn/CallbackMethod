@@ -64,13 +64,15 @@ What you do to make a MeReference is to write:
 
     ImportantClass executingObject = new ImportantClass();
 
-You then declare a MeRef with appropriate signature ()
+You then declare a MeRef with appropriate signature 
+
     MeRef<Integer,String> reference = new MeRef<>(executingObject,
                                                    "methodName",
                                                    new Class[]{int.class});
 
 
-Now, if method was to take this MeRef as a parameter type, it'd migth look exactly like this:
+Now, if a method was to take this MeRef as a parameter type, it might look exactly like this:
+
     void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... }
                              
 You can then pass it the reference like so,
@@ -81,7 +83,7 @@ and access the passed method : (like this in this case, there are a few run..()-
 
     reference.run( 42 );
 
-<i>( ... and yes, of course you can use the return value ... but I kept it simplified )</i>
+<i>( ... and yes, of course you can use the return value, as if executing the contained method directly )</i>
 
 
 <B>It very much works!</B>
