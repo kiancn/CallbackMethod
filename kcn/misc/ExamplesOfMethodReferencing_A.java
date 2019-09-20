@@ -10,14 +10,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
- /* I accept the throws for readability; and the stack-trace is nice for direct debugging anyway
+/* I accept the throws for readability; and the stack-trace is nice for direct debugging anyway
  * All possible exceptions in the MethodReferences and MeRefs are handled internally, also in MethodPack,
  * not yet in MePack */
 
 /**
  * I apologize for confusing tests and rather random example material. Later examples are better IMO.
  * I'll build template examples for all configurations ASP (at some point )
- *
+ * I believe test2 ended up being the most .
  */
 
 public class ExamplesOfMethodReferencing_A
@@ -31,13 +31,13 @@ public class ExamplesOfMethodReferencing_A
     {
         test0_NonGenericMethodReference();
 
-        test1MeReferenceWith2parametersVV_returnsO();
+        test1_MeRef_2parametersVV_returnsO();
 
-        test2MeReferenceWith2ParametersVV_returnsO();
+        test2_MeRef_ParametersVV_returnsO();
 
-        test3MeReferenceWith2ParametersVV_OReturn();
+        test3_MeRef_2ParametersVV_OReturn();
 
-        test4MeReferenceWith2ParametersVV_ArrayReturn();
+        test4_MeRef_2ParametersVV_ArrayReturn();
 
         test5_runObjV();
 
@@ -99,8 +99,8 @@ public class ExamplesOfMethodReferencing_A
     }
 
     /* Testing MethodReferenceGeneric where 'run method' requires two parameters and has a return */
-    public void test1MeReferenceWith2parametersVV_returnsO() throws
-                                                             NoSuchMethodException
+    public void test1_MeRef_2parametersVV_returnsO() throws
+                                                         NoSuchMethodException
     {
         /* An rather random object with an appropriate method available */
         SimpleCalculations calc = new SimpleCalculations();
@@ -114,7 +114,7 @@ public class ExamplesOfMethodReferencing_A
 
 
 
-        /* Technique A for giving method argument */
+        /* Technique A for giving method argument (there are more, and order is not significant as such) */
         returnMethod = new MeRef<>(calc, calc.getClass().getMethod("makeIntCoordinate",
                                                                    mPClasses));
 
@@ -137,7 +137,7 @@ public class ExamplesOfMethodReferencing_A
                            + " | Y: " + coord.y());
     }
 
-    public void test2MeReferenceWith2ParametersVV_returnsO() throws
+    public void test2_MeRef_ParametersVV_returnsO() throws
                                                              NoSuchMethodException,
                                                              InvocationTargetException,
                                                              IllegalAccessException
@@ -157,7 +157,7 @@ public class ExamplesOfMethodReferencing_A
         arbi.printSomething(returnMethod, 15, 60);
     }
 
-    public void test3MeReferenceWith2ParametersVV_OReturn() throws
+    public void test3_MeRef_2ParametersVV_OReturn() throws
                                                             NoSuchMethodException,
                                                             InvocationTargetException,
                                                             IllegalAccessException
@@ -179,7 +179,7 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    public void test4MeReferenceWith2ParametersVV_ArrayReturn() throws
+    public void test4_MeRef_2ParametersVV_ArrayReturn() throws
                                                                 NoSuchMethodException
     {
         /* Testing MethodReferenceGeneric with array return type og <>   */
@@ -191,9 +191,8 @@ public class ExamplesOfMethodReferencing_A
                 new Int2D(3, 4),
                 new Int2D(4, 5)
         };
-
+        /* Getting the Class type object of   */
         Class iCoordsArrayClass = iCoordsArray.getClass();
-
 
         Method iCMethod = calc.getClass().getMethod("coordinateMean", iCoordsArrayClass);
 
@@ -219,7 +218,7 @@ public class ExamplesOfMethodReferencing_A
          */
 
         /* Preparing the test object, that will execute methods*/
-        ExampleMethodsClass_A testObject = new ExampleMethodsClass_A(10);
+        ExampleMethodsClass_A testObject = new ExampleMethodsClass_A();
 
 
 
@@ -320,14 +319,13 @@ public class ExamplesOfMethodReferencing_A
         Class[] parameterClasses = {String.class, String.class};
 
         /*but you need the methods to match ;) [Class/object is purely placeholder] */
-        ExampleMethodsClass_A objectWithMethodsA = new ExampleMethodsClass_A(5);
-        ExampleMethodsClass_A objectWithMethodsB = new ExampleMethodsClass_A(5);
-        ExampleMethodsClass_A objectWithMethodsC = new ExampleMethodsClass_A(5);
+        ExampleMethodsClass_A objectWithMethodsA = new ExampleMethodsClass_A();
+        ExampleMethodsClass_A objectWithMethodsB = new ExampleMethodsClass_A();
+        ExampleMethodsClass_A objectWithMethodsC = new ExampleMethodsClass_A();
 
 
         /* 1 of 3 methodreferences (that will be passed) */
-        MeRef<String, String> meRef_Q;
-        meRef_Q = new MeRef<>(objectWithMethodsA, "printMessage1", parameterClasses);
+        MeRef<String, String> meRef_Q = new MeRef<>(objectWithMethodsA, "printMessage1", parameterClasses);
 
         /* 2 of 3 methodreferences (that will be passed) */
         MeRef<String, String> meRef_QQ;
@@ -337,7 +335,7 @@ public class ExamplesOfMethodReferencing_A
         MeRef<String, String> meRef_QQQ;
         meRef_QQQ = new MeRef<>(objectWithMethodsC, "printMessage3", parameterClasses);
 
-        /* adding MeRefs: order makes a difference - first in first out*/
+        /* adding MeRefs: order makes a difference - first in first executed */
         aMePack.add(meRef_Q);
         aMePack.add(meRef_QQ);
         aMePack.add(meRef_QQQ);
@@ -349,7 +347,7 @@ public class ExamplesOfMethodReferencing_A
         /* sending method pack */
         exB.clientMethods = aMePack;
 
-        /* supplying string-array (example specific of course)*/
+        /* supplying string-array (example specific of course) */
         exB.stringArray = stringsToMessWith.clone();
 
         /* processing string arrays supplied with methods supplied */

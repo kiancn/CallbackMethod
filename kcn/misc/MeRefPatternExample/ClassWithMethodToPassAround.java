@@ -1,4 +1,4 @@
-package kcn.misc.MeReferencePatternExample;
+package kcn.misc.MeRefPatternExample;
 
 /* just a class with two methods that have parameters and return types that fit the example */
 public class ClassWithMethodToPassAround

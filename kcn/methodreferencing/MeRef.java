@@ -4,32 +4,34 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-/* Should this class be called MethodReferenceGeneric or GMR or GeMeRef or GMeRef or ?
- *  */
+/* Should this class be called MethodReferenceGeneric or GMR or GeMeRef or GMeRef or ? */
+/* upcoming feature: next iteration will have return type inference, it's easy peasy from here */
 
 /**
- * A MeReference let you roll up a reference to an object and a method;
+ * A MeRef lets you roll up a reference to an object and a method;
  * and pass that method around and execute it from anywhere on command.
  * <p>
  * - features:
  * * generic type V is used input-parameters             (Values)
  * * generic type O is generally used as return type     (Output)
  * <p>
+ *     <p> Internal exception handling registers the different possible errors, and stops
+ *      the MeRef instance from functioning if even a single exception happens; the exception is captured in
+ *      the exceptionsCaught[] as ints for manual (user) processing. The MePack O,V is able
+ *     to detect defect MeRefs and remove them automatically. </p>
+ *
  * * Object type is here to allow manual type casting and great flexibility
  **/
 public class MeRef<V, O>
         implements IMethodReference
 {
-
     /* ~<>~ Fields ~<>~ */
 
     private Object objectReference; /* reference to the Object that executes the method (must own method) */
     private Method method; /* reference to instance of Method class, contents supplied at construction time */
     private Class[] argClasses; /* the option to supply an array of argClasses  */
-
-    private boolean autoHandleNullObject;/* if true referenced object is null-checked every execution */
+    private boolean persistentNullChecks;/* if true referenced object is null-checked every execution */
     private boolean shortCircuitRun; /* bool used in all 'run' methods for avoiding fatal missing references*/
-
     private int[] exceptionsCaught;
     private int IllegalAccessExceptionCaught; /* see getExceptionsCaught() for usages of these ints */
     private int InvocationTargetExceptionCaught;
@@ -43,7 +45,7 @@ public class MeRef<V, O>
     {
         objectReference = executingObject;
         method = methodThatWillBeExecuted;
-        autoHandleNullObject = true; /* safety by default */
+        persistentNullChecks = true; /* safety by default */
         initializeExceptionsArray();
     }
 
@@ -58,7 +60,7 @@ public class MeRef<V, O>
             NoSuchMethodExceptionCaught++;
             shortCircuitRun = true;
         }
-        autoHandleNullObject = true; /* safety by default */
+        persistentNullChecks = true; /* safety by default */
         initializeExceptionsArray();
     }
 
@@ -71,21 +73,19 @@ public class MeRef<V, O>
             method = executingObject.getClass().getMethod(methodName, varargClasses);
         } catch(NoSuchMethodException e)
         {
-            {
-                NoSuchMethodExceptionCaught++;
-                shortCircuitRun = true;
-            }
+            NoSuchMethodExceptionCaught++;
+            shortCircuitRun = true;
         }
-        autoHandleNullObject = true; /* safety by default */
+        persistentNullChecks = true; /* safety by default */
         initializeExceptionsArray();
     }
 
     /**
-     * this constructor exists the adventurous who might want to disable the auto-handling of null references
-     * * the other option is to pull getExecutingObject() and getExceptionsCaught() and do handle possible
-     * errors + except manually
+     * this constructor exists for the adventurous who might want to disable the auto-handling of null
+     * references the other option is to pull getExecutingObject() and getExceptionsCaught()
+     * and do handle possible exceptions manually
      */
-    public MeRef(Object executingObject, String methodName, boolean handleNullObjectAutomatically)
+    public MeRef(Object executingObject, String methodName, boolean handleHealthChecksAutomatically)
     {
         objectReference = executingObject;
         try
@@ -93,40 +93,45 @@ public class MeRef<V, O>
             method = executingObject.getClass().getMethod(methodName);
         } catch(NoSuchMethodException e)
         {
-            {
-                NoSuchMethodExceptionCaught++;
-                shortCircuitRun = true;
-            }
+            NoSuchMethodExceptionCaught++;
+            shortCircuitRun = true;
         }
-        autoHandleNullObject = handleNullObjectAutomatically;
+        persistentNullChecks = handleHealthChecksAutomatically;
         initializeExceptionsArray();
     }
 
-
-    public MeRef(Object executingObject, Method methodThatWillBeExecuted, boolean handleNullObjectAutomatically)
+    public MeRef(Object executingObject, Method methodThatWillBeExecuted, boolean handleHealthChecksAutomatically)
     {
         objectReference = executingObject;
         method = methodThatWillBeExecuted;
-        autoHandleNullObject = handleNullObjectAutomatically;
+        persistentNullChecks = handleHealthChecksAutomatically;
         initializeExceptionsArray();
     }
 
+    public boolean isAutoCheckForExceptions(){ return persistentNullChecks; }
+
+    public void setAutoCheckForExceptions(boolean autoCheckForExceptions){ this.persistentNullChecks = autoCheckForExceptions; }
 
     /* ~<>~ Methods ~<>~ */
 
     /**
      * Method executes supplied method with no parameters and a type O return
+     *
+     *
      */
-    @SuppressWarnings("unchecked") /* compiler is unsure of return type, but we know from construction time */
+    @SuppressWarnings("unchecked") /* compiler is unsure of return type (because invoke does not directly predict type)*/
     public O run()
     {
-        if(autoHandleNullObject){ isNullFound(); }
+        O result = null;
+
+        if(persistentNullChecks){ isNullFound();}
+
         if(!shortCircuitRun)
         {
             try
             {
                 /* invoke is executed on Method object, return type is cast to O */
-                return (O)method.invoke(objectReference);
+                result = (O)method.invoke(objectReference);
             } catch(IllegalAccessException e)
             {
                 IllegalAccessExceptionCaught++;
@@ -136,7 +141,7 @@ public class MeRef<V, O>
             }
         }
         /* null returns are passed */
-        return null;
+        return result;
     }
 
     /**
@@ -146,8 +151,8 @@ public class MeRef<V, O>
     @SuppressWarnings("unchecked") /* same (see O run() )*/
     public O run(V vValue)
     {
+        if(persistentNullChecks){ isNullFound(); }
 
-        if(autoHandleNullObject){ isNullFound(); }
         if(!shortCircuitRun)
         {
             try
@@ -161,7 +166,7 @@ public class MeRef<V, O>
                 InvocationTargetExceptionCaught++;
             }
         }
-        /* null returns are passed */
+
         return null;
     }
 
@@ -173,7 +178,7 @@ public class MeRef<V, O>
     public O run_VV(V vValueA, V vValueB)
     {
 
-        if(autoHandleNullObject){ isNullFound(); }
+        if(persistentNullChecks){ isNullFound(); }
         if(!shortCircuitRun)
         {
             try
@@ -187,14 +192,14 @@ public class MeRef<V, O>
                 InvocationTargetExceptionCaught++;
             }
         }
-        /* null returns are passed */
+
         return null;
     }
 
     /**
      * Method takes an array of objects of type V and returns an object of type O.
      * <p></p><b>LIMITS:</b><p>
-     * <i> * cannot be used to return an array of fundamental types! </i><p>
+     * <i> * cannot be used to return an array of primary types! </i><p>
      *
      * @param valuesArray an array of type V objects.
      * @return object of type O
@@ -202,7 +207,7 @@ public class MeRef<V, O>
     @SuppressWarnings("unchecked")
     public O run(V[] valuesArray)
     {
-        if(autoHandleNullObject){ isNullFound(); }
+        if(persistentNullChecks){ isNullFound(); }
 
         if(!shortCircuitRun)
         {
@@ -217,18 +222,18 @@ public class MeRef<V, O>
                 InvocationTargetExceptionCaught++;
             }
         }
-        /* null returns are passed */
+
         return null;
     }
 
     /**
      * Method takes a Object-object and a V-object as arguments, and returns an
-     * O-type object. (M..R..G.. <V,O>)
+     * O-type object.
      * <p></p><p> - method takes first a parameter object of type Object
      * <p> - then method takes a parameter object type V
      * <p> - method returns a type O object
      * <p>
-     * <b> - NB. the contained method must take care to cast the Object to
+     * <b> - NB. the contained method must take care to cast the return Object to
      * something useful.* </b>
      * <p>
      * - Method is named different because the compiler cannot distinguish between
@@ -240,12 +245,11 @@ public class MeRef<V, O>
      * @param value       an object of type V
      * @return an O-type object
      */
-    @SuppressWarnings("unchecked") /* same (see run() - except we can't secure that proper Object type
-    objects are going to be passed.)*/
+    @SuppressWarnings("unchecked") /* same (see run() */
     public O run_ObjV(Object inputObject, V value)
     {
         /* if autoHandle.. is true, check if object is null*/
-        if(autoHandleNullObject){isNullFound();}
+        if(persistentNullChecks){ isNullFound(); }
         /* if object is not null, shortCir.. will be false*/
         if(!shortCircuitRun)
         {
@@ -264,7 +268,6 @@ public class MeRef<V, O>
                 InvocationTargetExceptionCaught++;
             }
         }
-
         return null;
     }
 
@@ -282,7 +285,7 @@ public class MeRef<V, O>
     @SuppressWarnings("unchecked") /* same (see run() )*/
     public O run(Object inputObject, V[] valuesArray)
     {
-        if(autoHandleNullObject){ isNullFound(); }
+        if(persistentNullChecks){ isNullFound();}
         if(!shortCircuitRun)
         {
             try
@@ -305,13 +308,13 @@ public class MeRef<V, O>
     /* Method takes two params of diff types and returns an object type object */
     public Object run(O inputTypeO, V inputTypeV)
     {
-        /* if autohandling null object, do that*/
-        if(autoHandleNullObject){ isNullFound(); }
+        /* if auto-handling null object, do that*/
+        if(persistentNullChecks){ isNullFound(); }
         if(!shortCircuitRun)
         {
             try
             {
-                return getMethodToExecute().invoke(objectReference, inputTypeO, inputTypeV);
+                return getMethodObject().invoke(objectReference, inputTypeO, inputTypeV);
             } catch(IllegalAccessException e)
             {
                 IllegalAccessExceptionCaught++;
@@ -324,37 +327,50 @@ public class MeRef<V, O>
     }
 
     /**
-     * Method returns true if executing object is null;
-     * & switches shortCircuitRun to true to avoid fatal errors if object IS null.
-     **/
-    public boolean isNullFound()
+     * Method returns true if either null was found or exceptions were registered.
+     */
+    public boolean isReferenceBroke()
     {
-        /* if either checking-method returns true, return true*/
-        if(isExecutingObjectNull() || isMethodObjectNull()){ return true; }
+        if(didExceptionsHappen()){return true;}
+        return isNullFound();
+    }
 
+    /**
+     * Method returns true if exceptions were registered during execution
+     * - this is the 'soft check', in that it does not directly check for null.
+     */
+    public boolean didExceptionsHappen()
+    {
         /* handling the array counting up exceptions thrown */
         for(int exceptionCount : exceptionsCaught)
         {
             if(exceptionCount > 0) return true;
         }
+        return false;
+    }
 
+    /**
+     * Method returns true if executing Object object or Method object is null.
+     **/
+    public boolean isNullFound()
+    {
+        /* if either checking-method returns true, return true*/
+        if(isExecutingObjectNull() || isMethodObjectNull()){ return true; }
         /* else, null was not found*/
         return false;
     }
 
-    /* returns true is object was found null*/
+    /**
+     * Method returns true is referenced 'method-executing' object was found null
+     */
     public boolean isExecutingObjectNull()
     {
-        if(Objects.isNull(objectReference)) /* the only risk to check is the method executing object */
+        if(Objects.isNull(objectReference))
         {
             ExecutingObjectMissingCaught++;
             shortCircuitRun = true;
             return true;
-        } else
-        {
-            shortCircuitRun = false;
-            return false;
-        }
+        } else{ return false; }
     }
 
     /* Possibly I don't want to do this at all: Method object is
@@ -362,35 +378,31 @@ public class MeRef<V, O>
      it shouldn't be able to disappear. If this method goes,
     these three associated methods will reduce to just isNullFound()...
      */
+
+    /**
+     * Method returns true is contained Method type object is
+     */
     public boolean isMethodObjectNull()
     {
-
         if(Objects.isNull(method)) /* the only risk to check is the method executing object */
         {
             MethodObjectMissingCaught++;
             shortCircuitRun = true;
             return true;
-        } else
-        {
-            shortCircuitRun = false;
-            return false;
-        }
+        } else{ return false; }
     }
 
-    /* if you want tot do more reflection magic, here is direct access */
+    /**
+     * Method returns the contained Method object: if you want to do more reflection
+     * magic, here is direct access ...
+     */
     @Override
-    public Method getMethodToExecute(){ return method; }
+    public Method getMethodObject(){ return method; }
 
     @Override
     public Object getExecutingObject()
     {
-        if(!isNullFound())
-        {
-            return objectReference;
-        } else
-        {
-            return null;
-        }
+        if(!isNullFound()){ return objectReference; } else { return null; }
     }
 
     public int[] getExceptionsCaught()
@@ -408,9 +420,6 @@ public class MeRef<V, O>
                 MethodObjectMissingCaught
         };
     }
-
-//    public void setParameterClasses(Class[] classes){ argClasses = classes.clone(); }
-
 }
 /*
  * This saved my life as to how to supply the array of V to invoke in run(V[]) :

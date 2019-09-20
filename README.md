@@ -15,6 +15,7 @@ Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
       <i>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
       <I>Project v0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
         - Major changes: a) name changes and b) complete rewrite of exception handling.
+      <i> Project v0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling
 
 
 There are:
@@ -47,8 +48,9 @@ Personally I like the generics much better, but both versions work fine.
 # A basic basic pattern to start using a MeRef<V,O>
 
 * You need a reference to an Object that will execute the method 
-* You need a Method (or the string name of a method - as here)
-* You need Classes of the types of parameters the method takes
+* You need a MeRef<V,O> - (where V is input paramater type, and O is return type <i>generally, consult run()-method comments</i>) 
+* You need a Method or the string name of a method - as here; there are many constructors.
+* You need a Class or Class[] of the type/types of parameters the method takes (and primary types act weird and often need an array to accept a single parameter (at construction)).
 
 Let's say there is a class called: 
 
@@ -62,15 +64,20 @@ What you do to make a MeReference is to write:
 
     ImportantClass executingObject = new ImportantClass();
 
+You then declare a MeRef with appropriate signature ()
     MeRef<Integer,String> reference = new MeRef<>(executingObject,
-                                                             "methodName",
-                                                             new Class[]{int.class});
+                                                   "methodName",
+                                                   new Class[]{int.class});
+
+
+Now, if method was to take this MeRef as a parameter type, it'd migth look exactly like this:
+    void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... }
                              
-You can then pass it around like the reference it is,
+You can then pass it the reference like so,
 
     someMethod(reference);
 
-and access the method by typing:
+and access the passed method : (like this in this case, there are a few run..()-methods)
 
     reference.run( 42 );
 

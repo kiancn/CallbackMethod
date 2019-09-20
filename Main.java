@@ -1,38 +1,46 @@
 import kcn.misc.ExamplesOfMethodReferencing_A;
+import kcn.misc.MeRefPatternExample.ExampleMain;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLOutput;
 
 public class Main
 {
-
+    /* Each method exemplify the use of either:
+     *      - MethodReferences and MethodPacks (non-generic)
+     *      - MeReferences and MePacks (generic versions)
+     *      - just MeReferences (generic)
+     */
     public static void main(String[] args) throws
                                            InterruptedException,
                                            NoSuchMethodException,
                                            IllegalAccessException,
                                            InvocationTargetException
     {
+        /* I think: and recommend starting with the MeRefPatternExample;
+         * It has it's own main. Here it is: */
 
-        /* Each of the methods below exemplify the used of either:
-         *      - MethodReferences and MethodPacks (non-generic)
-         *      - MeReferences and MePacks (generic versions)
-         *      - just MeReferences (generic)
-         */
+//        ExampleMain.main(new String[]{});
 
-        /* These examples are not optimal for clarity, I think: and recommend starting with the
-        MeReferencePatternExample;
-        * It has it's own main. */
         var examples = new ExamplesOfMethodReferencing_A();
 
-//        examples.test0_NonGenericMethodReference(); /* it works fine but takes time to execute */
+        System.out.println("Uncomment the example you'd like to check out.");
 
-        examples.test1MeReferenceWith2parametersVV_returnsO(); /**/
-        examples.test2MeReferenceWith2ParametersVV_returnsO();
-        examples.test3MeReferenceWith2ParametersVV_OReturn();
-        examples.test4MeReferenceWith2ParametersVV_ArrayReturn();
-        examples.test5_runObjV();
-        examples.test6_MePackRunningSomeMeRefs();
+//        examples.test2_MeRef_ParametersVV_returnsO();
 //
-        examples.test7PassingMePacksAround();
-
+//        examples.test7PassingMePacksAround();
+//
+//        examples.test0_NonGenericMethodReference(); /* it works fine but takes time to execute */
+//
+//        examples.test1_MeRef_2parametersVV_returnsO();
+//
+//        examples.test3_MeRef_2ParametersVV_OReturn();
+//
+//        examples.test4_MeRef_2ParametersVV_ArrayReturn(); /* I blame so many of these examples being
+//                                                             run_VV on the fact that I am lazy.     */
+//        examples.test5_runObjV();
+//
+//        examples.test6_MePackRunningSomeMeRefs();
+//
     }
 }

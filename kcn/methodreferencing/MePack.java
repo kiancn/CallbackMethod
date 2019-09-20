@@ -3,8 +3,11 @@ package kcn.methodreferencing;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+/* next up, add simple logging feature when a methodreference has failed */
 
-/** Class instances are able to hold and pass around method-references */
+/**
+ * Class instances are able to hold and pass around method-references
+ */
 public class MePack<V, O>
 {
     private List<MeRef<V, O>> methods;
@@ -13,7 +16,7 @@ public class MePack<V, O>
     /* Unprimed Constructor; V and O are given, but no methods*/
     public MePack()
     {
-        this.methods = new ArrayList<MeRef<V, O>> ();
+        this.methods = new ArrayList<MeRef<V, O>>();
     }
 
     /* Unprimed Constructor; V and O are given, and so is an no methods.
@@ -21,8 +24,8 @@ public class MePack<V, O>
      * *-* using List because any kind of List should work */
     public MePack(List<MeRef<V, O>> methodReferences)
     {
-        this.methods = new ArrayList<MeRef<V, O>> ();
-        methods.addAll ( methodReferences );
+        this.methods = new ArrayList<MeRef<V, O>>();
+        methods.addAll(methodReferences);
     }
 
     public List<MeRef<V, O>> getMeRefs()
@@ -33,74 +36,81 @@ public class MePack<V, O>
     /**
      * Method executes run() on each MeRef in methods List
      * <p></p>Method nescessitates that zero parameter, void return type methods are referenced supplied.
-     *  <p></p>* using a MeRef with the signature:   MeRef<>   is ideal for this purpose..
+     * <p></p>* using a MeRef with the signature:   MeRef<>   is ideal for this purpose..
      **/
     public void run()
     {
-        if (automaticNullChecks) { handleNullReferences (); }
+        if(automaticNullChecks){ handleNullReferences(); }
 
-        for(MeRef<V, O> method : methods){
-            method.run ();
+        for(MeRef<V, O> method : methods)
+        {
+            method.run();
         }
     }
 
-        /**
-         * Method executes a collection of single <T> parameter and <T> retun type.
-         */
-        public <T> void run_void(T value)
-        {
-            if (automaticNullChecks) { handleNullReferences (); }
+    /**
+     * Method executes all method on it's list in supplied order:
+     * - takes two parameters
+     * - a parameter of type <T> that is supplied as a parameter to all methods-list classes.
+     * ** The value of parameter is used.
+     * - a parameter of type <U> that is used solely for defining the *return type*
+     * ** The value of parameter is discarded.
+     * - NB. if methods ends up not returning any method, the supplied object will be returned! (returnClassObject)
+     **/
+    public O run(V value) throws InvocationTargetException, IllegalAccessException
+    {
+        if(automaticNullChecks){ handleNullReferences(); }
 
-            for(MeRef<V,O> method : methods)
-            {
-                method.run((V)value); /* it is possible that null will be passed here */
-            }
+        for(MeRef<V, O> method : methods)
+        {
+            return method.run(value);
         }
 
+        return null;
+    }
 
-        /**
-         * Method executes all method on it's list in supplied order:
-         * - takes two parameters
-         * - a parameter of type <T> that is supplied as a parameter to all methods-list classes.
-         * ** The value of parameter is used.
-         * - a parameter of type <U> that is used solely for defining the *return type*
-         * ** The value of parameter is discarded.
-         * - NB. if methods ends up not returning any method, the supplied object will be returned! (returnClassObject)
-         **/
-        public O run(V value) throws InvocationTargetException, IllegalAccessException
+    /**
+     * Method executes a collection of single <T> parameter and <T> retun type.
+     */
+    public void run_void(V value)
+    {
+        if(automaticNullChecks){ handleNullReferences(); }
+
+        for(MeRef<V, O> method : methods)
         {
-            if (automaticNullChecks) { handleNullReferences (); }
-
-            for(MeRef<V,O> method : methods)
-            {
-                return method.run( value);
-            }
-
-            return null;
+            method.run(value); /* it is possible that null will be passed here */
         }
+    }
 
-
+    /**
+     * Add a method with appropriate signature to internal method list
+     */
     public boolean add(MeRef<V, O> method)
     {
-        methods.add ( method );
+        methods.add(method);
         return true;
     }
 
-
+    /**
+     * Remove a method from internal method list
+     */
     public boolean remove(MeRef<V, O> method)
     {
-        if (methods.contains ( method ))
+        if(methods.contains(method))
         {
-            methods.remove ( method );
+            methods.remove(method);
             return true;
         } else return false;
     }
 
-
-
-    public void enableAutoHandleNullReferences(boolean turnOnAutomaticHandlingOfNullObjects)
+    /**
+     * Method enables or disables checking of methods before execution.
+     *
+     * @param turnItOn true enables auto-checking.
+     */
+    public void enableAutoHandleNullReferences(boolean turnItOn)
     {
-        automaticNullChecks = turnOnAutomaticHandlingOfNullObjects;
+        automaticNullChecks = turnItOn;
     }
 
     /**
@@ -111,10 +121,10 @@ public class MePack<V, O>
     {
         for(MeRef<V, O> mr : methods)
         {
-            if (mr.getExecutingObject () == null)
+            if(mr.getExecutingObject() == null)
             {
 
-                methods.remove ( mr );
+                methods.remove(mr);
             }
         }
     }
@@ -122,7 +132,7 @@ public class MePack<V, O>
 
     public int length()
     {
-        return methods.size ();
+        return methods.size();
     }
 
 }

@@ -25,10 +25,10 @@ public class MethodReference
     private boolean referenceIsBroke;
     private int[] exceptionsCaught;
 
-    private int IllegalAccessExceptionThrown;
-    private int InvocationTargetExceptionThrown;
-    private int NullPointerExceptionCaughtPrematurely;
-    private int NoSuchMethodExceptionThrown;
+    private int IllegalAccessExceptionCaught;
+    private int InvocationTargetExceptionCaught;
+    private int NullPointerExceptionCaught;
+    private int NoSuchMethodExceptionCaught;
     private int ExecutingObjectMissingCaught;
     private int MethodObjectMissingCaught;
 
@@ -40,8 +40,7 @@ public class MethodReference
         reference it, I trust you want to do that, private or not. */
         initializeExceptionsArray();
     }
-
-
+    
     public MethodReference(Object executingThing, String methodName)
     {
         try
@@ -50,17 +49,15 @@ public class MethodReference
             methodToExecute.setAccessible(true);
         } catch(NoSuchMethodException e)
         {
-            NoSuchMethodExceptionThrown++;
+            NoSuchMethodExceptionCaught++;
         } catch(NullPointerException e)
         {
-            NullPointerExceptionCaughtPrematurely++;
+            NullPointerExceptionCaught++;
         }
         objectToExecuteMethodOn = executingThing;
 
         initializeExceptionsArray();
     }
-
-
 
     /*
       RUN METHODS
@@ -80,10 +77,10 @@ public class MethodReference
                 methodToExecute.invoke(objectToExecuteMethodOn);
             } catch(IllegalAccessException e)
             {
-                IllegalAccessExceptionThrown++; /*just updating the counter and moving on */
+                IllegalAccessExceptionCaught++; /*just updating the counter and moving on */
             } catch(InvocationTargetException e)
             {
-                InvocationTargetExceptionThrown++;
+                InvocationTargetExceptionCaught++;
             }
         }
     }
@@ -103,10 +100,10 @@ public class MethodReference
                 methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
             } catch(IllegalAccessException e)
             {
-                IllegalAccessExceptionThrown++;
+                IllegalAccessExceptionCaught++;
             } catch(InvocationTargetException e)
             {
-                InvocationTargetExceptionThrown++;
+                InvocationTargetExceptionCaught++;
             }
         }
     }
@@ -129,10 +126,10 @@ public class MethodReference
                 return (T)methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
             } catch(IllegalAccessException e)
             {
-                IllegalAccessExceptionThrown++;
+                IllegalAccessExceptionCaught++;
             } catch(InvocationTargetException e)
             {
-                InvocationTargetExceptionThrown++;
+                InvocationTargetExceptionCaught++;
             }
         }
         return null;
@@ -154,10 +151,10 @@ public class MethodReference
                 methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
             } catch(IllegalAccessException e)
             {
-                IllegalAccessExceptionThrown++;
+                IllegalAccessExceptionCaught++;
             } catch(InvocationTargetException e)
             {
-                InvocationTargetExceptionThrown++;
+                InvocationTargetExceptionCaught++;
             }
         }
 
@@ -190,15 +187,14 @@ public class MethodReference
                 return methodToExecute.invoke(objectToExecuteMethodOn, inputT, inputU);
             } catch(IllegalAccessException e)
             {
-                IllegalAccessExceptionThrown++;
+                IllegalAccessExceptionCaught++;
             } catch(InvocationTargetException e)
             {
-                InvocationTargetExceptionThrown++;
+                InvocationTargetExceptionCaught++;
             }
         }
         return null;
     }
-
 
     /*
      * GETTERS, NO SETTERS
@@ -211,14 +207,14 @@ public class MethodReference
      * <p> </p>
      */
     @Override
-    public Method getMethodToExecute()
+    public Method getMethodObject()
     {
         if(!isMethodObjectNull())
         {
             return methodToExecute;
         } else
         {
-            NullPointerExceptionCaughtPrematurely++;
+            NullPointerExceptionCaught++;
             return null;
         }
     }
@@ -234,7 +230,7 @@ public class MethodReference
             return objectToExecuteMethodOn;
         } else
         {
-            NullPointerExceptionCaughtPrematurely++;
+            NullPointerExceptionCaught++;
             return null;
         }
     }
@@ -261,7 +257,7 @@ public class MethodReference
     /* NB: So, someone might wonder if an option is not
      * missing throughout the code; namely the option to repair a MethodReference.
      * But no, I think that is a bad idea: finding out what actually went wrong consistently
-     * and having ways to fix that just has too many arbitrary variables.
+     * and having ways to fix that just has too many arbitrary variables/angles.
      */
 
     /**
@@ -324,10 +320,10 @@ public class MethodReference
 
     private void initializeExceptionsArray()
     {
-        exceptionsCaught = new int[]{IllegalAccessExceptionThrown,
-                InvocationTargetExceptionThrown,
-                NullPointerExceptionCaughtPrematurely, /* I believe the */
-                NoSuchMethodExceptionThrown,
+        exceptionsCaught = new int[]{IllegalAccessExceptionCaught,
+                InvocationTargetExceptionCaught,
+                NullPointerExceptionCaught, /* I believe the */
+                NoSuchMethodExceptionCaught,
                 ExecutingObjectMissingCaught,
                 MethodObjectMissingCaught
         };

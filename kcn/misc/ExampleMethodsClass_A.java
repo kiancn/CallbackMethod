@@ -2,6 +2,7 @@ package kcn.misc;
 
 import kcn.methodreferencing.MeRef;
 import kcn.utility.TO;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -10,16 +11,13 @@ import java.lang.reflect.InvocationTargetException;
  * [Class/object is purely placeholder] */
 public class ExampleMethodsClass_A
 {
-    public SimpleCalculations simpCalc;
+
     int bib;
 
+    @Contract(pure = true)
     public ExampleMethodsClass_A(){}
 
-    public ExampleMethodsClass_A(int i)
-    {
-        bib = i;
-        simpCalc = new SimpleCalculations();
-    }
+    public ExampleMethodsClass_A(int i){ bib = i; }
 
     /**
      * Method printSomething is an example of a method that takes a
@@ -28,9 +26,7 @@ public class ExampleMethodsClass_A
      * IS inferred and is utilized at call time :)
      * Also, the method is almost exactly useless.
      */
-    public void printSomething(@NotNull MeRef<Integer, Int2D> methodReference, int a, int b) throws
-                                                                                          InvocationTargetException,
-                                                                                          IllegalAccessException
+    public void printSomething(@NotNull MeRef<Integer, Int2D> methodReference, int a, int b)
     {
         System.out.println("This is printSomething() from " +
                            this.getClass().getName() +
@@ -54,20 +50,27 @@ public class ExampleMethodsClass_A
         return fC;
     }
 
-    public void printMessage1(String sA, String sB)
+    public String printMessage1(String sA, String sB)
     {
-        System.out.println(TO.purple(sA.toLowerCase() + " " + sB.toLowerCase()));
+        String temp = TO.purple(sA.toLowerCase() + " " + sB.toLowerCase());
+        System.out.println(temp);
+        return temp;
     }
 
-    public void printMessage2(String sA, String sB)
+    public String printMessage2(String sA, String sB)
     {
-        System.out.println(TO.green(sA.toUpperCase() + " " + sB.toUpperCase()));
+        String temp = TO.green(sA.toUpperCase() + " " + sB.toUpperCase());
+        System.out.println(temp);
+        return temp;
     }
 
-    public void printMessage3(String sA, String sB)
+    public String printMessage3(String sA, String sB)
     {
-        System.out.println("String A is " + sA.length() +
-                           " characters long and string B is " + sB.length());
+        String temp = "String A is " + sA.length() +" characters long and string B is " + sB.length();
+        System.out.println(temp);
+        return temp;
     }
+
+
 
 }

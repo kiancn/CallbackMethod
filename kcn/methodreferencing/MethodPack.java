@@ -1,32 +1,37 @@
 package kcn.methodreferencing;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+/* 2019/09/19 added simple logging feature when a methodreference has failed and is removed, and other
+adjustments */
 
-/* A kcn.datastructures.MethodPack contains a list for MethodReferences;
- *  - it is able to execute a collection of no-parameter, no/void return type methods.
- *  - it is able to execute a collection of single <T> parameter and <T> retun type.
- *  - it is able to execute a collection of single <T> parameter and <U> retun type.
- *
- *  - you can do a variety of loosely coupled fun /
- *                       dependency injection tasks
- *    with this class,
- *  - but it is not strong on compiler-time checking:
- *
- *  - the generic sibling MethodPathGeneric is much more versatile
- *
- *
- * */
+/**
+ * A MethodPack contains a list of MeRefs;
+ * <p>  - it is able to execute a collection of no-parameter, no/void return type methods.
+ * <p>  - it is able to execute a collection of single <V> parameter and <V> retun type methods.
+ * <p> - it is able to execute a collection of single <V> parameter and <O> retun type.
+ * <p>  * <b>Implementing this, take care to consistently 'supply methods' that have the right return types,
+ * because compiler cannot tell a method with a wrong signature from a good signature.</b></p>
+ * <p>  * This can be a good thing, if used carefully - but catastrophic in all other cases.
+ * <p>  *
+ * <p> - you can do a variety of loosely coupled fun / dependency injection tasks
+ * <p>    with this class, * <p><b>  - but it is not strong on compiler-time checking:</b>
+ * <p>
+ * - the generic sibling MethodPathGeneric is much more versatile and much more type-safe
+ */
 public class MethodPack
-
 {
+
+    private int removedMethodsCount;
+    private ArrayList<String> removedMethodsNamesList;
     private List<MethodReference> methods;
     private boolean automaticNullChecks; /* value of boolean effects all run method*/
 
     public MethodPack()
     {
-        this.methods = new ArrayList<MethodReference>();
+        methods = new ArrayList<>();
+        removedMethodsNamesList = new ArrayList<>();
+        removedMethodsCount = 0;
     }
 
     public List<MethodReference> getMethods()
@@ -40,13 +45,9 @@ public class MethodPack
      **/
     public void run()
     {
-        if(automaticNullChecks){ handleNullReferences(); }
+        if(automaticNullChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods)
-        {
-
-            method.run();
-        }
+        for(MethodReference method : methods) { method.run(); }
     }
 
     /**
@@ -54,31 +55,23 @@ public class MethodPack
      */
     public <V> void run(V value)
     {
-        if(automaticNullChecks){ handleNullReferences(); }
+        if(automaticNullChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods)
-        {
-            method.run_paramT_reObj(value);
-        }
+        for(MethodReference method : methods) { method.run_paramT_reObj(value); }
     }
 
 
     /**
      * Method executes all MethodReferences on it's list in supplied orders
-     *  - Method supplied must:
-     *  - take two parameters, can be of different types types;
-     *  - return an Object.
+     * - Method supplied must:
+     * - take two parameters, can be of different types types;
+     * - return an Object.
      */
-    public <V, O> Object run(V value, O returnClassObject) throws
-                                                      InvocationTargetException,
-                                                      IllegalAccessException
+    public <V, O> Object run(V value, O returnClassObject)
     {
-        if(automaticNullChecks){ handleNullReferences(); }
+        if(automaticNullChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods)
-        {
-            return method.run_paramTU_reObj(value, returnClassObject);
-        }
+        for(MethodReference method : methods) { return method.run_paramTU_reObj(value, returnClassObject); }
 
         return returnClassObject;
     }
@@ -105,7 +98,17 @@ public class MethodPack
     }
 
     /**
-     * Method
+     * Method enables or disables automatic null-checks.
+     * <p> Notice that the MethodPack </p>
+     *
+     * <p> Method does not perform any checks itself; going
+     * forward, all methods (MeRefs) will be checked. </p>
+     * <p><b>NB: Not enabled by default</b>, which maybe it
+     * should be - but I prefer responsibility to safety.
+     * <p></p>
+     * <p> Note that MethodReferences check+log themselves internally.
+     * They return null if they are somehow broken.</p>
+     * </p>
      */
     public void autoHandleNullReferences(boolean turnOnAutomaticHandlingOfNullObjects)
     {
@@ -113,22 +116,29 @@ public class MethodPack
     }
 
     /**
-     * method removes 'dead' MethodReferences from list (I know this fits one line)
+     * method removes 'dead' MethodReferences from list (I know it all fits one line)
+     * <p> this is public to allow manual cleaning; </p>
      **/
-    public void handleNullReferences()
+    public void handleBadReferences()
     {
         for(MethodReference mr : methods)
         {
-            if(mr.getExecutingObject() == null)
+            if(mr.isReferenceBroke())
             {
+                /* getting the name down before ejecting the bad apple */
+                removedMethodsNamesList.add(mr.getMethodObject().getName());
                 methods.remove(mr);
+                removedMethodsCount++;
             }
         }
     }
 
-    public int length()
-    {
-        return methods.size();
-    }
+    /**
+     * Get length of methods list
+     */
+    public int length(){ return methods.size(); }
 
+    public int getRemovedMethodsCount(){ return removedMethodsCount; }
+
+    public ArrayList<String> getRemovedMethodsNamesList(){ return removedMethodsNamesList; }
 }
