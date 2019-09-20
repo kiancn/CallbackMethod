@@ -44,7 +44,6 @@ public class ExamplesOfMethodReferencing_A
         test6_MePackRunningSomeMeRefs();
 
         test7PassingMePacksAround();
-
     }
 
     /**
@@ -100,7 +99,7 @@ public class ExamplesOfMethodReferencing_A
 
     /* Testing MethodReferenceGeneric where 'run method' requires two parameters and has a return */
     public void test1_MeRef_2parametersVV_returnsO() throws
-                                                         NoSuchMethodException
+                                                     NoSuchMethodException
     {
         /* An rather random object with an appropriate method available */
         SimpleCalculations calc = new SimpleCalculations();
@@ -114,11 +113,12 @@ public class ExamplesOfMethodReferencing_A
 
 
 
-        /* Technique A for giving method argument (there are more, and order is not significant as such) */
+        /* Technique A for giving Method argument to MeRef constructor */
         returnMethod = new MeRef<>(calc, calc.getClass().getMethod("makeIntCoordinate",
                                                                    mPClasses));
 
-        /* Technique B for giving method argument: A & B are equivalent */
+        /* Technique B for giving Method argument to constructor:
+         A or B is a matter of circumstance and taste */
         returnMethod = new MeRef<>(calc, "makeIntCoordinate", mPClasses);
 
 
@@ -129,18 +129,16 @@ public class ExamplesOfMethodReferencing_A
                            + coord.x() + " | Y: "
                            + coord.y());
 
-        /* the same ACTION again */
-        coord = returnMethod.run_VV(4, 5);
-
-        System.out.println("Coordinate created; X: "
-                           + returnMethod.run_VV(4, 5).x()
-                           + " | Y: " + coord.y());
+        /* and this, just to flaunt, that you can actuallly dot the returned type of the wrapped method:  */
+        System.out.println("Coordinate created;" +
+                           " X: " + returnMethod.run_VV(4, 5).x()
+                           + " | Y: " + returnMethod.run_VV(4, 5).y());
     }
 
     public void test2_MeRef_ParametersVV_returnsO() throws
-                                                             NoSuchMethodException,
-                                                             InvocationTargetException,
-                                                             IllegalAccessException
+                                                    NoSuchMethodException,
+                                                    InvocationTargetException,
+                                                    IllegalAccessException
     {
         SimpleCalculations calc = new SimpleCalculations();
 
@@ -158,9 +156,9 @@ public class ExamplesOfMethodReferencing_A
     }
 
     public void test3_MeRef_2ParametersVV_OReturn() throws
-                                                            NoSuchMethodException,
-                                                            InvocationTargetException,
-                                                            IllegalAccessException
+                                                    NoSuchMethodException,
+                                                    InvocationTargetException,
+                                                    IllegalAccessException
     {
 
 
@@ -180,7 +178,7 @@ public class ExamplesOfMethodReferencing_A
     }
 
     public void test4_MeRef_2ParametersVV_ArrayReturn() throws
-                                                                NoSuchMethodException
+                                                        NoSuchMethodException
     {
         /* Testing MethodReferenceGeneric with array return type og <>   */
         SimpleCalculations calc = new SimpleCalculations();
@@ -321,17 +319,18 @@ public class ExamplesOfMethodReferencing_A
         /*but you need the methods to match ;) [Class/object is purely placeholder] */
         ExampleMethodsClass_A objectWithMethodsA = new ExampleMethodsClass_A();
         ExampleMethodsClass_A objectWithMethodsB = new ExampleMethodsClass_A();
-        ExampleMethodsClass_A objectWithMethodsC = new ExampleMethodsClass_A();
+        ExampleMethodsClass_A objectWithMethodsC = new ExampleMethodsClass_A(); /* using three different
+                                        objects to illustrate different senders of methods to a MePack */
 
 
-        /* 1 of 3 methodreferences (that will be passed) */
+        /* 1 of 3 method-references (that will be passed) */
         MeRef<String, String> meRef_Q = new MeRef<>(objectWithMethodsA, "printMessage1", parameterClasses);
 
-        /* 2 of 3 methodreferences (that will be passed) */
+        /* 2 of 3 method-refs */
         MeRef<String, String> meRef_QQ;
         meRef_QQ = new MeRef<>(objectWithMethodsB, "printMessage2", parameterClasses);
 
-        /* 3 of 3 methodreferences (that will be passed) */
+        /* 3 of 3 method-references */
         MeRef<String, String> meRef_QQQ;
         meRef_QQQ = new MeRef<>(objectWithMethodsC, "printMessage3", parameterClasses);
 

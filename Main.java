@@ -14,25 +14,34 @@ public class Main
     public static void main(String[] args) throws
                                            InterruptedException,
                                            NoSuchMethodException,
-                                           IllegalAccessException,
-                                           InvocationTargetException
+                                           InvocationTargetException,
+                                           IllegalAccessException
+    {
+        exampleMethods();
+
+    }
+
+    public static void exampleMethods()throws
+                                       InterruptedException,
+                                       NoSuchMethodException,
+                                       IllegalAccessException,
+                                       InvocationTargetException
     {
         /* I think: and recommend starting with the MeRefPatternExample;
          * It has it's own main. Here it is: */
-
 //        ExampleMain.main(new String[]{});
 
         var examples = new ExamplesOfMethodReferencing_A();
-
         System.out.println("Uncomment the example you'd like to check out.");
 
 //        examples.test2_MeRef_ParametersVV_returnsO();
 //
 //        examples.test7PassingMePacksAround();
 //
-//        examples.test0_NonGenericMethodReference(); /* it works fine but takes time to execute */
+//        examples.test0_NonGenericMethodReference();   /* it works fine but takes time to execute, since
+//        it 'animates' a walk through a matrix */
 //
-//        examples.test1_MeRef_2parametersVV_returnsO();
+        examples.test1_MeRef_2parametersVV_returnsO();
 //
 //        examples.test3_MeRef_2ParametersVV_OReturn();
 //
