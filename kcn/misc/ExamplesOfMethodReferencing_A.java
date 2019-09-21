@@ -285,15 +285,10 @@ public class ExamplesOfMethodReferencing_A
         }
 
 
-        /* Making a list and putting all method references into it.*/
-        List<MeRef<Int2D, Float2D>> packOfMethods = genPack.getMeRefs();
-
         /* Getting elements from same list  */
-        for(int i = 0; i < packOfMethods.size(); i++)
-        {  /* and executing each one with different parameters. */
-            packOfMethods.get(i).run_ObjV(
-                    objectUsedAsInput,
-                    new Int2D(i * i, i + i));
+        for(int i = 0; i < genPack.getMeRefs().size(); i++)
+        {  /* and executing each one with different input arguments. */
+            genPack.getMeRefs().get(i).run_ObjV(objectUsedAsInput, new Int2D(i * i, i + i));
         }
     }
 

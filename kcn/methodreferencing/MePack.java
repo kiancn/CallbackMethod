@@ -33,6 +33,7 @@ public class MePack<V, O>
         return methods;
     }
 
+
     /**
      * Method executes run() on each MeRef in methods List
      * <p></p>Method nescessitates that zero parameter, void return type methods are referenced supplied.
@@ -47,38 +48,20 @@ public class MePack<V, O>
             method.run();
         }
     }
-
+    /* These methods were the result of not thinking ... apologize if agony is caused upon reading */
+    /* They are here for reflection, will go soon */
     /**
      * Method executes all method on it's list in supplied order:
-     * - takes two parameters
-     * - a parameter of type <T> that is supplied as a parameter to all methods-list classes.
-     * ** The value of parameter is used.
-     * - a parameter of type <U> that is used solely for defining the *return type*
-     * ** The value of parameter is discarded.
-     * - NB. if methods ends up not returning any method, the supplied object will be returned! (returnClassObject)
+     * - takes a single type V parameter
+     * - returns void
      **/
-    public O run(V value) throws InvocationTargetException, IllegalAccessException
+    public void run(V value)
     {
         if(automaticNullChecks){ handleNullReferences(); }
 
         for(MeRef<V, O> method : methods)
         {
-            return method.run(value);
-        }
-
-        return null;
-    }
-
-    /**
-     * Method executes a collection of single <T> parameter and <T> retun type.
-     */
-    public void run_void(V value)
-    {
-        if(automaticNullChecks){ handleNullReferences(); }
-
-        for(MeRef<V, O> method : methods)
-        {
-            method.run(value); /* it is possible that null will be passed here */
+            method.run(value);
         }
     }
 
@@ -123,12 +106,13 @@ public class MePack<V, O>
         {
             if(mr.getExecutingObject() == null)
             {
-
+                removedMethods.add(mr.getMethodObject().getName());
                 methods.remove(mr);
             }
         }
     }
 
+    private ArrayList<String> removedMethods;
 
     public int length()
     {

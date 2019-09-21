@@ -7,22 +7,28 @@ public class ActiveClass
 {
     public void activity_setUpMeRef_SendOff_UseReturn()
     {
-        /* this class contains a method we want to execute */
+        /* this class contains two methods we want to execute somewhere else */
         ClassWithMethodToPassAround executingObject = new ClassWithMethodToPassAround();
+
+
+        /* Declaring/constructing the MeReference */ /* PLEASE NOTE: a MeRef will become inert if not
+        declared right; it logs the failure internally, and that information is easy to come by, check out
+        the exposed methods of both MeRef and MePack */
+        MeRef<Integer, String> reference = new MeRef<>(executingObject,
+                                                       "addTwoNumbers",
+                                                       new Class[]{int.class, int.class});
+        /* Turning off automatic pre-emptive null checks null */
+        reference.setAutoCheckForExceptions(false);
+
+        /* Declaring another MeRef, for another method */
+        MeRef<Integer, String> reference1 = new MeRef<Integer, String>(executingObject,
+                                                                       "numberToString",
+                                                                       new Class[]{int.class});
 
 
         /* this class has a field for a method-reference (and execute it through another method) */
         AnotherClass anotherClassObj = new AnotherClass();
 
-        /* Declaring/constructing the MeReference */
-        MeRef<Integer, String> reference = new MeRef<>(executingObject,
-                                                       "addTwoNumbers",
-                                                       new Class[]{int.class, int.class});
-        reference.setAutoCheckForExceptions(false);
-        /* Declaring another MeRef, for another method */
-        MeRef<Integer, String> reference1 = new MeRef<Integer, String>(executingObject,
-                                                                       "numberToString",
-                                                                       new Class[]{int.class});
         /* method passed as reference another class */
         anotherClassObj.processingMethod = reference;
 

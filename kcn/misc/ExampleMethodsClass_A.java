@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 
-/* Class holds a bunch to rather random methods that manipulate differente types of data
+/* Class holds a bunch to rather random methods that manipulate different types of data
  * [Class/object is purely placeholder] */
 public class ExampleMethodsClass_A
 {

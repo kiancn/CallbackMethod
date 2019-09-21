@@ -15,11 +15,11 @@ import java.util.Objects;
  * * generic type V is used input-parameters             (Values)
  * * generic type O is generally used as return type     (Output)
  * <p>
- *     <p> Internal exception handling registers the different possible errors, and stops
- *      the MeRef instance from functioning if even a single exception happens; the exception is captured in
- *      the exceptionsCaught[] as ints for manual (user) processing. The MePack O,V is able
- *     to detect defect MeRefs and remove them automatically. </p>
- *
+ * <p> Internal exception handling registers the different possible errors, and stops
+ * the MeRef instance from functioning if even a single exception happens; the exception is captured in
+ * the exceptionsCaught[] as ints for manual (user) processing. The MePack O,V is able
+ * to detect defect MeRefs and remove them automatically. </p>
+ * <p>
  * * Object type is here to allow manual type casting and great flexibility
  **/
 public class MeRef<V, O>
@@ -27,6 +27,11 @@ public class MeRef<V, O>
 {
     /* ~<>~ Fields ~<>~ */
 
+    private final String[] ErrorDescriptionStrings = {"IllegalAccessExceptionCaught",
+            "InvocationTargetExceptionCaught",
+            "NoSuchMethodExceptionCaught",
+            "ExecutingObjectMissingCaught",
+            "MethodObjectMissingCaught"};
     private Object objectReference; /* reference to the Object that executes the method (must own method) */
     private Method method; /* reference to instance of Method class, contents supplied at construction time */
     private Class[] argClasses; /* the option to supply an array of argClasses  */
@@ -110,14 +115,12 @@ public class MeRef<V, O>
 
     public boolean isAutoCheckForExceptions(){ return persistentNullChecks; }
 
-    public void setAutoCheckForExceptions(boolean autoCheckForExceptions){ this.persistentNullChecks = autoCheckForExceptions; }
-
     /* ~<>~ Methods ~<>~ */
+
+    public void setAutoCheckForExceptions(boolean autoCheckForExceptions){ this.persistentNullChecks = autoCheckForExceptions; }
 
     /**
      * Method executes supplied method with no parameters and a type O return
-     *
-     *
      */
     @SuppressWarnings("unchecked") /* compiler is unsure of return type (because invoke does not directly predict type)*/
     public O run()
@@ -360,6 +363,12 @@ public class MeRef<V, O>
         return false;
     }
 
+    /* Possibly I don't want to do this at all: Method object is
+    encapsulated and its state is untouched after construction,
+     it shouldn't be able to disappear. If this method goes,
+    these three associated methods will reduce to just isNullFound()...
+     */
+
     /**
      * Method returns true is referenced 'method-executing' object was found null
      */
@@ -372,12 +381,6 @@ public class MeRef<V, O>
             return true;
         } else{ return false; }
     }
-
-    /* Possibly I don't want to do this at all: Method object is
-    encapsulated and its state is untouched after construction,
-     it shouldn't be able to disappear. If this method goes,
-    these three associated methods will reduce to just isNullFound()...
-     */
 
     /**
      * Method returns true is contained Method type object is
@@ -402,7 +405,7 @@ public class MeRef<V, O>
     @Override
     public Object getExecutingObject()
     {
-        if(!isNullFound()){ return objectReference; } else { return null; }
+        if(!isNullFound()){ return objectReference; } else{ return null; }
     }
 
     public int[] getExceptionsCaught()
@@ -419,6 +422,18 @@ public class MeRef<V, O>
                 ExecutingObjectMissingCaught,
                 MethodObjectMissingCaught
         };
+    }
+
+    /**
+     * Returns array of strings representing possible error-types in order
+     * of the int-array counting caught exceptions exceptionsArray.
+     * The array represents the possible exceptions and null objects,
+     * but NOT and NEVER a log of actual events;
+     * method is provided mainly for debugging purposes for.
+     */
+    public String[] getExceptionDescriptionStrings()
+    {
+        return ErrorDescriptionStrings;
     }
 }
 /*
