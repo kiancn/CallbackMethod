@@ -10,17 +10,19 @@ import java.util.Objects;
 /**
  * A MeRef lets you roll up a reference to an object and a method;
  * and pass that method around and execute it from anywhere on command.
+ * <p></p>
+ * - Supplied generic types:<p><i>
+ * <p>* generic type V is used input-parameters             (Values)
+ * <p>* generic type O is generally used as return type     (Output)</i>
  * <p>
- * - features:
- * * generic type V is used input-parameters             (Values)
- * * generic type O is generally used as return type     (Output)
- * <p>
+ * <p> (The just-mentioned rule is broken in run(O,V), which returns an Object) </p><p></p>
  * <p> Internal exception handling registers the different possible errors, and stops
  * the MeRef instance from functioning if even a single exception happens; the exception is captured in
  * the exceptionsCaught[] as ints for manual (user) processing. The MePack O,V is able
  * to detect defect MeRefs and remove them automatically. </p>
  * <p>
- * * Object type is here to allow manual type casting and great flexibility
+ * * Object type (in parameters and return types) is here to allow manual type
+ *  casting and greater flexibility.
  **/
 public class MeRef<V, O>
         implements IMethodReference
@@ -45,6 +47,7 @@ public class MeRef<V, O>
     private int NoSuchMethodExceptionCaught;
 
     /* ~<>~ Constructors ~<>~ */
+
     /* A proper description of the practical cases for each constructor is needed and upcoming  */
     public MeRef(Object executingObject, Method methodThatWillBeExecuted)
     {
@@ -112,17 +115,13 @@ public class MeRef<V, O>
         persistentNullChecks = handleHealthChecksAutomatically;
         initializeExceptionsArray();
     }
-
-    public boolean isAutoCheckForExceptions(){ return persistentNullChecks; }
-
     /* ~<>~ Methods ~<>~ */
 
-    public void setAutoCheckForExceptions(boolean autoCheckForExceptions){ this.persistentNullChecks = autoCheckForExceptions; }
 
     /**
      * Method executes supplied method with no parameters and a type O return
      */
-    @SuppressWarnings("unchecked") /* compiler is unsure of return type (because invoke does not directly predict type)*/
+    @SuppressWarnings("unchecked") /* compiler is unsure of return type (because invoke does predict type)*/
     public O run()
     {
         O result = null;
@@ -328,6 +327,17 @@ public class MeRef<V, O>
         }
         return null;
     }
+
+    /**
+     * Returns true if persistent null checks are enabled, meaning that executing object and method object
+     * will be checked for presence before every use/access (in run..(..)-methods).
+     */
+    public boolean isPersistentCheckingEnabled(){ return persistentNullChecks; }
+
+    /**
+     * Method lets you turn on or off persistent null checks
+     */
+    public void setPersistentNullChecks(boolean checkForNull){ persistentNullChecks = checkForNull; }
 
     /**
      * Method returns true if either null was found or exceptions were registered.

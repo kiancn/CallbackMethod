@@ -6,8 +6,8 @@ import java.util.Objects;
 
 
 /**
- * Class instances hold a reference to *a method and an object* and is able to execute that method
- * on that object from anywhere
+ * Class instances hold a reference to *<b>a Method object and an Object object</b>* and,
+ * is able to execute the method on the object .
  * The Reference has a generic twin in MeReference, which is safer to use and has much greater
  * flexibility.
  * <p>
@@ -37,10 +37,10 @@ public class MethodReference
         methodToExecute = method;
         objectToExecuteMethodOn = executingThing;
         methodToExecute.setAccessible(true); /* making method available even if it is private : if you
-        reference it, I trust you want to do that, private or not. */
+        reference it, I trust you want to do that, private or not. */ /* */
         initializeExceptionsArray();
     }
-    
+
     public MethodReference(Object executingThing, String methodName)
     {
         try
@@ -89,7 +89,8 @@ public class MethodReference
     /**
      * Method executes the method referenced, returns void
      *
-     * @param inputParameter object type T whose value will be used as parameter when executing referenced method.
+     * @param inputParameter object type T the values of which will
+     *                       be used as parameter when executing referenced  method.
      **/
     public <T> void run_paramT(T inputParameter)
     {
@@ -162,19 +163,17 @@ public class MethodReference
     }
 
     /**
-     * Method 'runs/invokes' methodToExecute with parameter of type T and returns an object of type U.
+     * Method 'runs/invokes' methodToExecute with parameter of type T and U
+     * and returns an object of type Object.
      * <p>
-     * This is possible because the return type is not a part of the signature necessary to identify the
-     * method at construction, and so different return types can slip in: Errors are avoided because
-     * returns are simply not checked at construction time.
      * <p>
      * This is not safe, or maybe even smart - but it might be used in clever ways!
      * <p>
      * NB: this seems like a bad idea to me, but also something some people might do. But I recommend
      * the generic version for most tasks.
      *
-     * @param inputT input parameter type T; this is the handled/active parameter
-     * @param inputU 'output' parameter type U: U is the type
+     * @param inputT input parameter type T -
+     * @param inputU input parameter type U
      *               argued object used *only* to get return *type*.
      * @return object type Object
      **/
@@ -236,8 +235,8 @@ public class MethodReference
     }
 
     /* Exception handling: exceptions and nulls are tracked as int,
-     * and it one if reported, this object will stop being able
-     *  to execute it's run methods */
+     * and if one of these counters are incremented, this object will stop itself being able
+     *  to execute it's run methods.  */
 
     /**
      * Method returns true if MethodReference is somehow broke:
@@ -263,12 +262,14 @@ public class MethodReference
     /**
      * Method returns true if any object checked is null
      */
-    @Override
     public boolean isNullFound()
     {
         if(isExecutingObjectNull() || isMethodObjectNull()){ return true; } else{ return false; }
     }
 
+    /**
+     * Method returns true if the object meant to execute contained method is missing.
+     */
     private boolean isExecutingObjectNull()
     {
         if(Objects.isNull(objectToExecuteMethodOn))
@@ -279,6 +280,9 @@ public class MethodReference
         } else{return false;}
     }
 
+    /**
+     * Returns true if Method object is somehow null.
+     */
     private boolean isMethodObjectNull()
     {
         if(Objects.isNull(methodToExecute))
@@ -314,7 +318,6 @@ public class MethodReference
      */
     public int[] getExceptionsCaught()
     {
-        initializeExceptionsArray(); /* re-initializing exceptionsCaught */
         return exceptionsCaught;
     }
 

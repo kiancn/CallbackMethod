@@ -52,10 +52,4 @@ public class ExampleMethodsClass_B
 
     private void printStrings(){ for(String s : processedStrings) { System.out.println(s); } }
 
-    /*Pseudo-random number between zero and array-length */
-    int getRandomAccess(String[] stringsToMessWith)
-    {
-        int r = (int)(Math.random() * (double)stringsToMessWith.length - 1);
-        return r;
-    }
 }

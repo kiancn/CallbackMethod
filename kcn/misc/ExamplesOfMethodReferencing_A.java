@@ -8,7 +8,6 @@ import kcn.utility.TO;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 /* I accept the throws for readability; and the stack-trace is nice for direct debugging anyway
  * All possible exceptions in the MethodReferences and MeRefs are handled internally, also in MethodPack,
@@ -43,7 +42,7 @@ public class ExamplesOfMethodReferencing_A
 
         test6_MePackRunningSomeMeRefs();
 
-        test7PassingMePacksAround();
+        test7_PassingMePacksAround();
     }
 
     /**
@@ -292,7 +291,7 @@ public class ExamplesOfMethodReferencing_A
         }
     }
 
-    public void test7PassingMePacksAround()
+    public void test7_PassingMePacksAround()
     {
         /* an array of strings to send and manipulate ... [Class/object is purely placeholder] */
         String[] stringsToMessWith = new String[]{

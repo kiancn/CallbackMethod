@@ -2,9 +2,7 @@ package kcn.misc;
 
 import kcn.methodreferencing.MeRef;
 
-import java.lang.reflect.Modifier;
-
-public class Example_ThisKeywordProblem
+public class Example_DeclaringWithThisKeyword_ShowLogging
 {
     MeRef<Integer, Double> intToDoubleMethod;
 
@@ -13,14 +11,14 @@ public class Example_ThisKeywordProblem
         return Double.valueOf(number);
     }
 
-    public void demonstrationThisKeywordProblematic() throws NoSuchMethodException
+    public void demonstration_ExposeLogging_DeclaringMeRef() throws NoSuchMethodException
     {
         int c = 1;
 
         /* attempting to create a MeRef using this keyword;*/
         System.out.println("Try\t" + c++ + "");
         intToDoubleMethod = new MeRef<Integer, Double>(this, this.getClass().getMethod("intToDouble",
-                                                                                     new Class[]{int.class}));
+                                                                                       new Class[]{int.class}));
         /* the malfunction is caught internally  */
         printMeRefProblemLog(intToDoubleMethod);
 
@@ -29,17 +27,15 @@ public class Example_ThisKeywordProblem
         printMeRefProblemLog(intToDoubleMethod);
 
 
-        Example_ThisKeywordProblem ex = this;
+        Example_DeclaringWithThisKeyword_ShowLogging ex = this;
         System.out.println("Try\t" + c++ + "");
-        intToDoubleMethod = new MeRef<Integer, Double>(ex, ex.getClass().getMethod("intToDouble",
-                                                                                   new Class[]{int.class}));
+        intToDoubleMethod = new MeRef<Integer, Double>(ex, ex.getClass().getMethod("intToDouble", new Class[]{int.class}));
         printMeRefProblemLog(intToDoubleMethod);
 
         System.out.println("Try\t" + c++ + "");
         TinyNestedClass tinyInstance = new TinyNestedClass();
         intToDoubleMethod = new MeRef<Integer, Double>(tinyInstance,
-                                                       tinyInstance.getClass().getMethod("intToDouble",
-                                                                                         int.class));
+                                                       tinyInstance.getClass().getMethod("intToDouble", int.class));
         printMeRefProblemLog(intToDoubleMethod);
 
         Double d = intToDoubleMethod.run(42);

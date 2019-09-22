@@ -18,7 +18,7 @@ public class ActiveClass
                                                        "addTwoNumbers",
                                                        new Class[]{int.class, int.class});
         /* Turning off automatic pre-emptive null checks null */
-        reference.setAutoCheckForExceptions(false);
+        reference.setPersistentNullChecks(false);
 
         /* Declaring another MeRef, for another method */
         MeRef<Integer, String> reference1 = new MeRef<Integer, String>(executingObject,

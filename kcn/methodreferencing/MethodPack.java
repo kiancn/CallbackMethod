@@ -8,28 +8,27 @@ adjustments */
 /**
  * A MethodPack contains a list of MeRefs;
  * <p>  - it is able to execute a collection of no-parameter, no/void return type methods.
- * <p>  - it is able to execute a collection of single <V> parameter and <V> retun type methods.
- * <p> - it is able to execute a collection of single <V> parameter and <O> retun type.
- * <p>  * <b>Implementing this, take care to consistently 'supply methods' that have the right return types,
- * because compiler cannot tell a method with a wrong signature from a good signature.</b></p>
- * <p>  * This can be a good thing, if used carefully - but catastrophic in all other cases.
- * <p>  *
- * <p> - you can do a variety of loosely coupled fun / dependency injection tasks
- * <p>    with this class, * <p><b>  - but it is not strong on compiler-time checking:</b>
+ * <p>  - it is able to execute a collection of single <V> parameter and no/void return type methods.
+ * <p>
+ * <p> - for other tasks contained MethodReferences are intended to be accessed and iterated over through
+ * getMethods() .
+ * <p><b>  - the MethodPack it is not strong on compiler-time type checking, be careful.
+ * </b>
  * <p>
  * - the generic sibling MethodPathGeneric is much more versatile and much more type-safe
  */
 public class MethodPack
 {
+    private List<MethodReference> methods;
 
+    private boolean automaticErrorChecks; /* value of boolean effects all run method*/
     private int removedMethodsCount;
     private ArrayList<String> removedMethodsNamesList;
-    private List<MethodReference> methods;
-    private boolean automaticNullChecks; /* value of boolean effects all run method*/
 
     public MethodPack()
     {
         methods = new ArrayList<>();
+
         removedMethodsNamesList = new ArrayList<>();
         removedMethodsCount = 0;
     }
@@ -45,7 +44,7 @@ public class MethodPack
      **/
     public void run()
     {
-        if(automaticNullChecks){ handleBadReferences(); }
+        if(automaticErrorChecks){ handleBadReferences(); }
 
         for(MethodReference method : methods) { method.run(); }
     }
@@ -55,26 +54,11 @@ public class MethodPack
      */
     public <V> void run(V value)
     {
-        if(automaticNullChecks){ handleBadReferences(); }
+        if(automaticErrorChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods) { method.run_paramT_reObj(value); }
+        for(MethodReference method : methods) { method.run_paramT(value); }
     }
 
-
-    /**
-     * Method executes all MethodReferences on it's list in supplied orders
-     * - Method supplied must:
-     * - take two parameters, can be of different types types;
-     * - return an Object.
-     */
-    public <V, O> Object run(V value, O returnClassObject)
-    {
-        if(automaticNullChecks){ handleBadReferences(); }
-
-        for(MethodReference method : methods) { return method.run_paramTU_reObj(value, returnClassObject); }
-
-        return returnClassObject;
-    }
 
     /**
      * Method adds a MethodReference object to internal list
@@ -110,9 +94,9 @@ public class MethodPack
      * They return null if they are somehow broken.</p>
      * </p>
      */
-    public void autoHandleNullReferences(boolean turnOnAutomaticHandlingOfNullObjects)
+    public void enableAutoHandlingOfBadReferences(boolean turnOnAutomaticHandlingOfBadMeRefs)
     {
-        automaticNullChecks = turnOnAutomaticHandlingOfNullObjects;
+        automaticErrorChecks = turnOnAutomaticHandlingOfBadMeRefs;
     }
 
     /**
