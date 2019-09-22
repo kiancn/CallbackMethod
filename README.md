@@ -7,41 +7,23 @@ The Methodreferencing package allows you to pass methods along as references & t
 Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
 
 * The MethodReferences and MethodPack are non-generic types and are ideal for simpler signalling tasks.
-* The MeRefs and MePacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
-  many complex task types.
 
-    -- This will grow into a proper introduction. 2019/09/17 --
+        * MethodReference   
+        * MethodPack        
     
-      <i>v. 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
-      <I>v. 0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
-        - Major changes: a) name changes and b) complete rewrite of exception handling.
-      <i>v. 0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling</i>
-      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>
-There are:
-
-    * MethodReference   
-    * MethodPack        
 These are non-generic versions that are very easy to pass around;
 but that have low type-safety and limited capabilities when it comes to parameters
 
-And then there are Generic versions called: 
+* The MeRefs and MePacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
+  many complex task types.
 
-    * MeRef<V,O>        type instances are objects that contains a method you can execute whereever
-    * MePack<V,O>       type is a Glorified list of MeRefs
+        * MeRef<V,O>        type instances are objects that contains a method you can execute whereever
+        * MePack<V,O>       type is a Glorified list of MeRefs
 
 
 
 Personally I like the generics much better, but both versions work fine.
 
-# Notice
-* All files are heavily commented ( except when they aren't yet ).
-* A small set of test-scenarios is included in the package (and prepared for you in Main).
-
-* A new, less confusing example of a MeReference in action has been added (it's light!):
-
-      kcn.misc.MeReferencePatternExample           
-
-* I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
 
 # Short Explanation
 # A basic basic pattern to start using a MeRef<V,O>
@@ -111,3 +93,24 @@ This is a proof of concept version and many possible features are missing. <i> P
 * Optimizing invoke calls: The two Me(thod)Reference types use Reflection at construction time and at run time. The heavy lifting is done at construction time, then the references are there. However, at execution time (in all run() variants) the invoke-method is called on the referenced Method object, and that is about twice as heavy as a regular method call (http://www.jguru.com/faq/view.jsp?EID=246569): though it might be worth it because you can pass methods around like a freak, it is worth a closer look at the internals of the invoke-method.
 
 * Make an introduction to each feature of the classes (and possibly define a set of best practices...).
+
+
+
+# Notice
+* All files are heavily commented ( except when they aren't yet ).
+* A small set of test-scenarios is included in the package (and prepared for you in Main).
+
+* A new, less confusing example of a MeReference in action has been added (it's light!):
+
+      kcn.misc.MeReferencePatternExample           
+
+* I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
+
+# Version Update Summaries
+    -- This will grow into a proper introduction. 2019/09/17 --
+    
+      <i>v. 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
+      <I>v. 0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
+        - Major changes: a) name changes and b) complete rewrite of exception handling.
+      <i>v. 0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling</i>
+      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>      
