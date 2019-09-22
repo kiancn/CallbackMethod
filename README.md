@@ -12,12 +12,11 @@ Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
 
     -- This will grow into a proper introduction. 2019/09/17 --
     
-      <i>Project version 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
-      <I>Project v0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
+      <i>v. 0.01d (only end to end tests done; but no irregular behaviour noticed)</i>
+      <I>v. 0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
         - Major changes: a) name changes and b) complete rewrite of exception handling.
-      <i> Project v0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling
-
-
+      <i>v. 0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling</i>
+      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>
 There are:
 
     * MethodReference   
@@ -48,9 +47,9 @@ Personally I like the generics much better, but both versions work fine.
 # A basic basic pattern to start using a MeRef<V,O>
 
 * You need a reference to an Object that will execute the method 
-* You need a MeRef<V,O> - (where V is input paramater type, and O is return type <i>generally, consult run()-method comments</i>) 
+* You need a MeRef<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 * You need a Method or the string name of a method - as here; there are many constructors.
-* You need a Class or Class[] of the type/types of parameters the method takes (and primary types act weird and often need an array to accept a single parameter (at construction)).
+* You need a Class or Class[] of the type/types of parameters the method takes (and primary types act different and need an array to accept even a single parameter (at construction)).
 
 Let's say there is a class called: 
 
@@ -67,18 +66,19 @@ Let's just say you get a reference to instance of that class like this:
 
 
 
-You then declare a MeRef with appropriate signature 
+<b>You then declare a MeRef with appropriate signature </b>
 
-    MeRef<Integer,String> reference = new MeRef<>(executingObject,
-                                                   "methodName",
-                                                   new Class[]{int.class});
-
+    MeRef<Integer,String> reference = new MeRef<>(executingObject,          // method-executing object
+                                                   "methodName",            // identifier of method (aka name)
+                                                   new Class[]{int.class}); 
+                                                        // array of Class type objects that mirrors the
+                                                        // parameter list of the sought after method.
 
 Now, if a method was to take this MeRef as a parameter type, it might look exactly like this:
 
     void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... } 
  
-You can then pass it the reference like so,
+You can then pass a reference to a method;
 
     someMethod(reference);
 
@@ -96,23 +96,18 @@ and access the passed method : (like this in this case, there are a few run..(..
 Finishing up: 
 * I hope the tests referenced in main Main are readable and comprehensible. <b> Please look at the new example first </b>
   
-* I apologize for using custom wrapper classes in the examples (two 2d coordinate types and a Matrix class... they'll be standardized at some date.).
-
+* Sorry for using custom wrapper classes in the examples (two 2d coordinate types and a Matrix class... they'll be standardized at some date.).
 
 
 This is a proof of concept version and many possible features are missing. <i> Please inspire me </i>
 
 * try it out, it's pretty neat!
 * please comment: all experiences are welcome, even if you just need to shout
-* send any suggestions for improvements to me
-
+* please fork and develop the idea! I'd love to participate!
 * Please pass this around, I believe it is pretty useful.
-
-
 
 # Pending goals:
 * Test features more rigidly
 * Optimizing invoke calls: The two Me(thod)Reference types use Reflection at construction time and at run time. The heavy lifting is done at construction time, then the references are there. However, at execution time (in all run() variants) the invoke-method is called on the referenced Method object, and that is about twice as heavy as a regular method call (http://www.jguru.com/faq/view.jsp?EID=246569): though it might be worth it because you can pass methods around like a freak, it is worth a closer look at the internals of the invoke-method.
-* For MeReference: Automatic inference and checking of return type is possible at construction time because Method object comes with a .getReturnType method.
-* Actual return type inference; but I think that will get a seperate set of types - because the existing works pretty well without the added rigidity/security. 
+
 * Make an introduction to each feature of the classes (and possibly define a set of best practices...).
