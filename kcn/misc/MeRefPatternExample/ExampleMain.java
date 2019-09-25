@@ -11,7 +11,10 @@ public class ExampleMain
 {
     public static void main(String[] args)
     {
+        System.out.println("\t\nInside >> ExampleMain main method << \t\n");
+
         ActiveClass example = new ActiveClass();
+
         /* Actual example */
         example.activity_setUpMeRef_SendOff_UseReturn();
     }

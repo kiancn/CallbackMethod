@@ -41,7 +41,7 @@ public class SimpleCalculations
             {
             countCoordinate.translate ( coords[i].x(),coords[i].y());
             }
-        return countCoordinate.x () + countCoordinate.y();
+        return (countCoordinate.x () + countCoordinate.y())/coords.length;
     }
 
     public void longRounds(long count, long rounds)

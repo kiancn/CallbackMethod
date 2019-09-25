@@ -18,13 +18,14 @@ public class MethodReference
         implements IMethodReference
 {
 
-    /*exception-counters ... unending */
+
     private Object objectToExecuteMethodOn;
     private Method methodToExecute;
 
     private boolean referenceIsBroke;
-    private int[] exceptionsCaught;
 
+    private int[] exceptionsCaught;
+    /*exception-counters ... unending */
     private int IllegalAccessExceptionCaught;
     private int InvocationTargetExceptionCaught;
     private int NullPointerExceptionCaught;
@@ -46,7 +47,7 @@ public class MethodReference
         try
         {
             methodToExecute = executingThing.getClass().getMethod(methodName);
-            methodToExecute.setAccessible(true);
+            methodToExecute.setAccessible(true); /* it should enable */
         } catch(NoSuchMethodException e)
         {
             NoSuchMethodExceptionCaught++;
@@ -149,7 +150,7 @@ public class MethodReference
         {
             try
             {
-                methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
+                return methodToExecute.invoke(objectToExecuteMethodOn, inputParameter);
             } catch(IllegalAccessException e)
             {
                 IllegalAccessExceptionCaught++;
@@ -325,7 +326,7 @@ public class MethodReference
     {
         exceptionsCaught = new int[]{IllegalAccessExceptionCaught,
                 InvocationTargetExceptionCaught,
-                NullPointerExceptionCaught, /* I believe the */
+                NullPointerExceptionCaught,
                 NoSuchMethodExceptionCaught,
                 ExecutingObjectMissingCaught,
                 MethodObjectMissingCaught

@@ -1,7 +1,7 @@
 package kcn.misc;
 
 import kcn.methodreferencing.MeRef;
-import kcn.utility.TO;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +33,7 @@ public class ExampleMethodsClass_A
                            " instance \n\tX: " +
                            bib * methodReference.run_VV(a, b).x() +
                            "\t Y: " +
-                           bib * methodReference.run_VV(a, b).y());
+                           bib * methodReference.run_VV(a, b).y()); /**/
     }
 
     public Float2D giveFloatCoordinate(Object obj, Int2D iCoo)
@@ -52,14 +52,14 @@ public class ExampleMethodsClass_A
 
     public String printMessage1(String sA, String sB)
     {
-        String temp = TO.purple(sA.toLowerCase() + " " + sB.toLowerCase());
+        String temp = sA.toLowerCase() + " " + sB.toLowerCase();
         System.out.println(temp);
         return temp;
     }
 
     public String printMessage2(String sA, String sB)
     {
-        String temp = TO.green(sA.toUpperCase() + " " + sB.toUpperCase());
+        String temp = sA.toUpperCase() + " " + sB.toUpperCase();
         System.out.println(temp);
         return temp;
     }

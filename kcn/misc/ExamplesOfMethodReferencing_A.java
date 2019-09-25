@@ -4,14 +4,28 @@ import kcn.methodreferencing.MePack;
 import kcn.methodreferencing.MeRef;
 import kcn.methodreferencing.MethodPack;
 import kcn.methodreferencing.MethodReference;
-import kcn.utility.TO;
+//import kcn.utility.TO;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /* I accept the throws for readability; and the stack-trace is nice for direct debugging anyway
  * All possible exceptions in the MethodReferences and MeRefs are handled internally, also in MethodPack,
- * not yet in MePack */
+ * not yet in MePack; Example_DeclaringWithThisKeyword_ShowLogging class this for the MeRef.
+ *
+ * All the Method References and packs have 'safety by default'; you can declare one unsuccessfully
+ *  and not get an error; or a method reference might stop working because of exceptions, and no exception
+ * will be thrown. Bad? Maybe.
+ * The current functionality follows the idea that MeRefs are best used as callback methods or signalling
+ * tasks with many clients (that is what the packs are for).
+ * As such I'd rather safely/prepared return a null (when executing a reffed method)
+ *                  or do a quick .isReferenceBroke(), which returns true if reference has thrown exceptions
+ * (Recommended checking when instancing and when unsure of the current state of affairs when executing
+ * contained methods).
+ *
+ * The other part is that the MePacks CAN check if each reference is broke before attempting to execute it
+ * and remove from itself.
+ *  */
 
 /**
  * I apologize for confusing tests and rather random example material. Later examples are better IMO.
@@ -36,7 +50,7 @@ public class ExamplesOfMethodReferencing_A
 
         test3_MeRef_2ParametersVV_OReturn();
 
-        test4_MeRef_2ParametersVV_ArrayReturn();
+        test4_MeRef_2ParametersVArray_OReturn();
 
         test5_runObjV();
 
@@ -50,36 +64,17 @@ public class ExamplesOfMethodReferencing_A
      */
     public void test0_NonGenericMethodReference() throws NoSuchMethodException
     {
-        CharMatrix matrix3 = new CharMatrix(TO.blue("¤"), 5);
+        System.out.println("\t\nInside >> test0_NonGenericMethodReference() << \t\n");
 
-        /** Test of MethodReference type and MethodPack type **/
-        /*The first ever instance of MethodReference,
-         * using the constructor that takes a stringy name of
-         * method
-         */
-        /** 'matrix3' is the object that executes the method, simpleMoveThough is the name of the method
-         * involved **/
-        MethodReference makeMatrixMethod = new MethodReference(matrix3, "simpleMoveThrough");
-
-        MethodPack event = new MethodPack();
-
-        event.add(makeMatrixMethod);
-
-        event.add(new MethodReference(matrix3, "simpleMoveThrough"));
-
-        event.run();
-
-
-        /** Test of MethodReference type and MethodPack type **/
         /* Second test of same feature */
-        SimpleCalculations sc = new SimpleCalculations();
+        SimpleCalculations scObject = new SimpleCalculations();
 
-        MethodReference square = new MethodReference(sc, sc.getClass().getMethod("NumberSquared", int.class));
+        MethodReference square = new MethodReference(scObject, scObject.getClass().getMethod("NumberSquared", int.class));
 
-        MethodReference abs = new MethodReference(sc, sc.getClass().getMethod("NumberAbsolute", int.class));
+        MethodReference abs = new MethodReference(scObject, scObject.getClass().getMethod("NumberAbsolute", int.class));
 
         /* running a single MethodReference with parameter and no return type */
-        square.run_paramT_reObj(5000);
+        square.run_paramT(5000);
 
         /* Testing MethodPack with MethodReferences w no return ( .returnResult )*/
         MethodPack mp = new MethodPack();
@@ -89,17 +84,20 @@ public class ExamplesOfMethodReferencing_A
         mp.run(10);
         mp.run(25);
 
-        /* Any kind of object can be passed to returnResult; but return type of wrapped method must match parameter type */
+        /* Example of method requiring use of run_paramT_reT; which  but return type of wrapped method must
+        match parameter type */
         MethodPack stringMethods = new MethodPack();
-        MethodReference stringMethod = new MethodReference(sc, sc.getClass().getMethod("returnString", String.class));
-        System.out.println(stringMethod.run_paramT_reT("Abracadrabra"));
+        MethodReference stringMethod = new MethodReference(scObject, scObject.getClass().getMethod("returnString", String.class));
+
+        System.out.println(stringMethod.run_paramT_reT("\nAbracadrabra"));
 
     }
 
     /* Testing MethodReferenceGeneric where 'run method' requires two parameters and has a return */
-    public void test1_MeRef_2parametersVV_returnsO() throws
-                                                     NoSuchMethodException
+    public void test1_MeRef_2parametersVV_returnsO() throws NoSuchMethodException
     {
+        System.out.println("\t\nInside >> test1_MeRef_2parametersVV_returnsO() << \t\n");
+
         /* An rather random object with an appropriate method available */
         SimpleCalculations calc = new SimpleCalculations();
 
@@ -134,11 +132,10 @@ public class ExamplesOfMethodReferencing_A
                            + " | Y: " + returnMethod.run_VV(4, 5).y());
     }
 
-    public void test2_MeRef_ParametersVV_returnsO() throws
-                                                    NoSuchMethodException,
-                                                    InvocationTargetException,
-                                                    IllegalAccessException
+    public void test2_MeRef_ParametersVV_returnsO() throws NoSuchMethodException
     {
+        System.out.println("\t\nInside >> test2_MeRef_ParametersVV_returnsO() << \t\n");
+
         SimpleCalculations calc = new SimpleCalculations();
 
         MeRef<Integer, Int2D> returnMethod;
@@ -154,12 +151,9 @@ public class ExamplesOfMethodReferencing_A
         arbi.printSomething(returnMethod, 15, 60);
     }
 
-    public void test3_MeRef_2ParametersVV_OReturn() throws
-                                                    NoSuchMethodException,
-                                                    InvocationTargetException,
-                                                    IllegalAccessException
+    public void test3_MeRef_2ParametersVV_OReturn() throws NoSuchMethodException
     {
-
+        System.out.println("Inside >> test3_MeRef_2ParametersVV_OReturn() << ");
 
         SimpleCalculations calc = new SimpleCalculations();
 
@@ -176,9 +170,10 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    public void test4_MeRef_2ParametersVV_ArrayReturn() throws
-                                                        NoSuchMethodException
+    public void test4_MeRef_2ParametersVArray_OReturn() throws NoSuchMethodException
     {
+        System.out.println("\t\nInside >> test4_MeRef_2ParametersVArray_OReturn() << \t\n");
+
         /* Testing MethodReferenceGeneric with array return type og <>   */
         SimpleCalculations calc = new SimpleCalculations();
 
@@ -189,9 +184,10 @@ public class ExamplesOfMethodReferencing_A
                 new Int2D(4, 5)
         };
         /* Getting the Class type object of   */
-        Class iCoordsArrayClass = iCoordsArray.getClass();
 
-        Method iCMethod = calc.getClass().getMethod("coordinateMean", iCoordsArrayClass);
+
+        Method iCMethod = calc.getClass().getMethod("coordinateMean", iCoordsArray.getClass());
+
 
         var iCArrayMethodReference = new MeRef<>(calc, iCMethod);
         // this is like magic to me, notice the empty <> - gives <Object,Object>
@@ -204,6 +200,8 @@ public class ExamplesOfMethodReferencing_A
 
     public void test5_runObjV() throws NoSuchMethodException
     {
+        System.out.println("\t\nInside >> test5_runObjV() << \t\n");
+
         /*
          * Testing run_ObjV(Object.. V...);
          *      - it takes first an object of type Object
@@ -251,9 +249,10 @@ public class ExamplesOfMethodReferencing_A
 
     }
 
-    public void test6_MePackRunningSomeMeRefs() throws
-                                                NoSuchMethodException
+    public void test6_MePackRunningSomeMeRefs() throws NoSuchMethodException
     {
+        System.out.println("\t\nInside >> test6_MePackRunningSomeMeRefs() <<\t\n ");
+
         /*                                                                         */
         /* Testing generic method packs     */
 
@@ -272,7 +271,7 @@ public class ExamplesOfMethodReferencing_A
         /* Newing up a methodpack of relevant types*/
         MePack<Int2D, Float2D> genPack = new MePack<>();
 
-        /* Just an appropriate and random Object */
+        /* Just an appropriate Object that we also know will cast well as a String */
         Object objectUsedAsInput = "This is a String cast as an Object!";
 
         /* Adding x methods to genPack */
@@ -293,6 +292,8 @@ public class ExamplesOfMethodReferencing_A
 
     public void test7_PassingMePacksAround()
     {
+        System.out.println("\t\nInside >> test7_PassingMePacksAround() <<\t\n ");
+
         /* an array of strings to send and manipulate ... [Class/object is purely placeholder] */
         String[] stringsToMessWith = new String[]{
                 "Onki was a weird boy. Are you?",

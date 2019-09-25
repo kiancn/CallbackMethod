@@ -16,6 +16,8 @@ adjustments */
  * </b>
  * <p>
  * - the generic sibling MethodPathGeneric is much more versatile and much more type-safe
+ *
+ * <p>
  */
 public class MethodPack
 {
@@ -28,9 +30,10 @@ public class MethodPack
     public MethodPack()
     {
         methods = new ArrayList<>();
-
         removedMethodsNamesList = new ArrayList<>();
         removedMethodsCount = 0;
+
+
     }
 
     public List<MethodReference> getMethods()

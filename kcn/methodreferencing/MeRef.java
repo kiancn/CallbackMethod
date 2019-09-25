@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-/* Should this class be called MethodReferenceGeneric or GMR or GeMeRef or GMeRef or ? */
-/* upcoming feature: next iteration will have return type inference, it's easy peasy from here */
 
 /**
  * A MeRef lets you roll up a reference to an object and a method;
@@ -49,6 +47,7 @@ public class MeRef<V, O>
     /* ~<>~ Constructors ~<>~ */
 
     /* A proper description of the practical cases for each constructor is needed and upcoming  */
+
     public MeRef(Object executingObject, Method methodThatWillBeExecuted)
     {
         objectReference = executingObject;
@@ -72,13 +71,13 @@ public class MeRef<V, O>
         initializeExceptionsArray();
     }
 
-    public MeRef(Object executingObject, String methodName, Class[] varargClasses)
+    public MeRef(Object executingObject, String methodName, Class[] argClasses)
     {
-        argClasses = varargClasses;
+        this.argClasses = argClasses;
         objectReference = executingObject;
         try
         {
-            method = executingObject.getClass().getMethod(methodName, varargClasses);
+            method = executingObject.getClass().getMethod(methodName, argClasses);
         } catch(NoSuchMethodException e)
         {
             NoSuchMethodExceptionCaught++;

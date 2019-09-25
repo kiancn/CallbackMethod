@@ -7,18 +7,36 @@ import java.util.List;
  * Class instances are able to hold and pass around method-references.
  *
  * <p> There are supplied only two run-methods in this class, both return void.
- * <p></p><b> To use/run/execute the individual MeRefs and use their returns in meaningful ways,
- * call getMeRefs() and access each by index, and use the specifically needed run..(..) variant . </b>
- *
+ * <p></p><i> To use/run/execute the individual MeRefs and use their returns in meaningful ways,
+ * call getMeRefs() and access each by index, and use the specifically needed run..(..) variant
+ * you need from there. </i>
  * <p><p></p> This is a design decision, and I made it like this because
  * it makes it very transparent what you/user ends up doing with the return value.
- * </p></p>
+ * </p></p><p></p>
+ * <p><i><b>
+ *     Please also note different possible approaches to handling bad MeRefs in MePacks:
+ * </i></b><i><p>
+ *          1) Continuous checking (every run) is turned OFF by default,</i>
+ *          turn it on by running enableAutoHandleBrokeReferences(true):
+ *          the effect is that the MePack checks each MeRef before execution and
+ *          removes any broken instances.
+ *
+ *<p><i> 2) Single checks for bad references and removal of broke refs
+ *          can be achieved by running handleBrokeReferences().</i>
+ *<b><p></p>
+ *       A) Please also note that a broken MeRef will NOT throw any exceptions,
+ *      even if they are broken, because the MeRef 'error'-checks itself internally,
+ *      logs any exceptions or null references and returns either null
+ *      or void depending on occasion.</b><p>
+ *      This means that a broken MeRef can be run from the MePack without
+ *      crashing that system.
+ *      It also means that user needs to take direct responsibility for broken MeRefs.
  */
 public class MePack<V, O>
 {
     private List<MeRef<V, O>> methods; /* contained MeRefs*/
-    private boolean automaticNullChecks; /* value of boolean effects all run method */
-    private ArrayList<String> removedMethods;
+    private boolean alwaysCheckIfBroke; /* value of boolean effects all run methods */
+    private ArrayList<String> removedMethodNames; /* names of dysfunctional, removed MeRefs */
 
     /**
      * Default Constructor; V and O are given, but no methods.
@@ -28,7 +46,7 @@ public class MePack<V, O>
     public MePack()
     {
         this.methods = new ArrayList<MeRef<V, O>>();
-        removedMethods = new ArrayList<String>();
+        removedMethodNames = new ArrayList<String>();
     }
 
     /**
@@ -42,7 +60,7 @@ public class MePack<V, O>
     {
         this.methods = new ArrayList<MeRef<V, O>>();
         methods.addAll(methodReferences);
-        removedMethods = new ArrayList<String>();
+        removedMethodNames = new ArrayList<String>();
 
     }
 
@@ -59,7 +77,7 @@ public class MePack<V, O>
      **/
     public void run()
     {
-        if(automaticNullChecks){ handleBadReferences(); }
+        if(alwaysCheckIfBroke){ handleBadReferences(); }
 
         for(MeRef<V, O> method : methods)
         {
@@ -74,7 +92,7 @@ public class MePack<V, O>
      **/
     public void run(V value)
     {
-        if(automaticNullChecks){ handleBadReferences(); }
+        if(alwaysCheckIfBroke){ handleBadReferences(); }
 
         for(MeRef<V, O> method : methods)
         {
@@ -91,21 +109,27 @@ public class MePack<V, O>
     public void add(MeRef<V, O> method)
     {
         methods.add(method);
-
     }
 
-    /** Method adds supplied MeRef only if it is not already on methods-list */
+    /** Method adds supplied MeRef only if it is not already on methods-list,
+     * returns true if insert was successful, false if duplicates were found. */
     public boolean addNoDuplicates(MeRef<V,O> method){
-        if(!methods.contains(method)){
-            methods.add(method);
-            return true;
+
+        for(int i = 0; i<methods.size();i++)
+        {
+            if(!methods.get(i).getMethodObject().getName().equalsIgnoreCase(method.getMethodObject().toString())){
+                methods.add(method);
+                return true;
+            }
         }
-        else return false;
+        return false;
     }
 
 
     /**
      * Remove a method from internal methods-list
+     * Returns true if method could be and was removed,
+     * otherwise false;
      */
     public boolean remove(MeRef<V, O> method)
     {
@@ -121,22 +145,23 @@ public class MePack<V, O>
      *
      * @param turnItOn true enables auto-checking.
      */
-    public void enableAutoHandleNullReferences(boolean turnItOn)
+    public void enableAutoHandleBrokeReferences(boolean turnItOn)
     {
-        automaticNullChecks = turnItOn;
+        alwaysCheckIfBroke = turnItOn;
     }
 
     /**
-     * Method removes 'dead' MethodReferences from list (I know this fits one line)
+     * Method removes 'dead' MethodReferences from list
+     * AND adds the name of removed method to internal list.
      **/
     public void handleBadReferences()
     {
-        for(MeRef<V, O> mr : methods)
+        for(MeRef<V, O> methodReference : methods)
         {
-            if(mr.isReferenceBroke())
+            if(methodReference.isReferenceBroke())
             {   /* Adding name of method to be removed, to a log/list removedMethods   */
-                removedMethods.add(mr.getMethodObject().getName());
-                methods.remove(mr);
+                removedMethodNames.add(methodReference.getMethodObject().getName());
+                methods.remove(methodReference);
             }
         }
     }
