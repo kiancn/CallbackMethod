@@ -14,23 +14,23 @@ import java.util.List;
  * it makes it very transparent what you/user ends up doing with the return value.
  * </p></p><p></p>
  * <p><i><b>
- *     Please also note different possible approaches to handling bad MeRefs in MePacks:
+ * Please also note different possible approaches to handling bad MeRefs in MePacks:
  * </i></b><i><p>
- *          1) Continuous checking (every run) is turned OFF by default,</i>
- *          turn it on by running enableAutoHandleBrokeReferences(true):
- *          the effect is that the MePack checks each MeRef before execution and
- *          removes any broken instances.
+ * 1) Continuous checking (every run) is turned OFF by default,</i>
+ * turn it on by running enableAutoHandleBrokeReferences(true):
+ * the effect is that the MePack checks each MeRef before execution and
+ * removes any broken instances.
  *
- *<p><i> 2) Single checks for bad references and removal of broke refs
- *          can be achieved by running handleBrokeReferences().</i>
- *<b><p></p>
- *       A) Please also note that a broken MeRef will NOT throw any exceptions,
- *      even if they are broken, because the MeRef 'error'-checks itself internally,
- *      logs any exceptions or null references and returns either null
- *      or void depending on occasion.</b><p>
- *      This means that a broken MeRef can be run from the MePack without
- *      crashing that system.
- *      It also means that user needs to take direct responsibility for broken MeRefs.
+ * <p><i> 2) Single checks for bad references and removal of broke refs
+ * can be achieved by running handleBrokeReferences().</i>
+ * <b><p></p>
+ * A) Please also note that a broken MeRef will NOT throw any exceptions,
+ * even if they are broken, because the MeRef 'error'-checks itself internally,
+ * logs any exceptions or null references and returns either null
+ * or void depending on occasion.</b><p>
+ * This means that a broken MeRef can be run from the MePack without
+ * crashing that system.
+ * It also means that user needs to take direct responsibility for broken MeRefs.
  */
 public class MePack<V, O>
 {
@@ -64,7 +64,9 @@ public class MePack<V, O>
 
     }
 
-    /** Method returns the internal list of MeRefs for your running pleasure. */
+    /**
+     * Method returns the internal list of MeRefs for your running pleasure.
+     */
     public List<MeRef<V, O>> getMeRefs()
     {
         return methods;
@@ -111,18 +113,28 @@ public class MePack<V, O>
         methods.add(method);
     }
 
-    /** Method adds supplied MeRef only if it is not already on methods-list,
-     * returns true if insert was successful, false if duplicates were found. */
-    public boolean addNoDuplicates(MeRef<V,O> method){
+    /**
+     * Method adds supplied MeRef only if it is not already on methods-list,
+     * returns true if insert was successful, false if duplicates were found.
+     */
+    public boolean addNoDuplicates(MeRef<V, O> method)
+    {
 
-        for(int i = 0; i<methods.size();i++)
+        boolean duplicateFound = false;
+
+        for(int i = 0; i < methods.size(); i++)
         {
-            if(!methods.get(i).getMethodObject().getName().equalsIgnoreCase(method.getMethodObject().toString())){
-                methods.add(method);
-                return true;
+            if(methods.get(i).getMethodObject().getName().equalsIgnoreCase(method.getMethodObject().getName()))
+            {
+                duplicateFound = true;
             }
         }
-        return false;
+
+        if(!duplicateFound)
+        {
+            methods.add(method);
+            return true;
+        } else{ return false; }
     }
 
 
@@ -166,7 +178,9 @@ public class MePack<V, O>
         }
     }
 
-    /** Gets you the number of items on */
+    /**
+     * Gets you the number of items on
+     */
     public int size()
     {
         return methods.size();
