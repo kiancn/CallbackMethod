@@ -2,7 +2,8 @@
     package kcn.methodreferencing
 
 In short:
-The Methodreferencing package allows you to pass methods along as references & to pack methods together to pass along.
+The Methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
+
 
 Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
 
@@ -72,16 +73,18 @@ and access the passed method : (like this in this case, there are a few run..(..
 
 
 <B>It very much works!</B>
-- it also very much has issues; 
-  * The constructors and methods have been tested against some case but but all ny a long shot: but it is difficult to figure out exactly how to use the different features together - without having see examples; so I'll make something up and make the existing better.  
+- it probably also has all sorts of issues I didn't discover; 
+  * please write me about any issues you might be having!
+  * since it is a task to figure out exactly how to use the different features together
+   - without having see examples; so I'll make something up and make the existing better.  
 
 Finishing up: 
-* I hope the tests referenced in main Main are readable and comprehensible. <b> Please look at the new example first </b>
+* I hope the tests referenced in main Main are easy enough to read.
   
-* Sorry for using custom wrapper classes in the examples (two 2d coordinate types and a Matrix class... they'll be standardized at some date.).
+* Sorry for using custom wrapper classes in the examples (two 2d coordinate types).
 
 
-This is a proof of concept version and many possible features are missing. <i> Please inspire me </i>
+This is a proof of concept version and many possible features are missing. <i> Please inspire me! </i>
 
 * try it out, it's pretty neat!
 * please comment: all experiences are welcome, even if you just need to shout
@@ -94,6 +97,8 @@ This is a proof of concept version and many possible features are missing. <i> P
 
 * Make an introduction to each feature of the classes (and possibly define a set of best practices...).
 
+* A few new constructors are coming up; when method-reference is created to reference a method on the same object as the method-references is being declared on, the constructor can be as simple as a single string (for no parameter methods), or a string and a Class[] . These options should exist.
+
 
 
 # Notice
@@ -104,6 +109,7 @@ This is a proof of concept version and many possible features are missing. <i> P
 
       kcn.misc.MeReferencePatternExample           
 
+* 
 * I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
 
 # Version Update Summaries
@@ -113,4 +119,5 @@ This is a proof of concept version and many possible features are missing. <i> P
       <I>v. 0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
         - Major changes: a) name changes and b) complete rewrite of exception handling.
       <i>v. 0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling</i>
-      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>      
+      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>     
+      <i>v. 0.0165 Better explanatory comments, minor changes in exception handling + renamings</i> 
