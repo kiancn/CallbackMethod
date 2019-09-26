@@ -27,10 +27,18 @@ Personally I like the generics much better, but both versions work fine.
 
 
 # Short Explanation
-The MethodedReferences and MeRefs are basically wrapper classes for Method objects;
-The canonical Reflections library has a beautiful collection of classes
-the interesting part is that by storing a reference to an instance of a class that
-has the method as a member
+The MethodedReferences and MeRefs are broadly speaking
+wrapper classes for java.lang.reflect.Method objects;
+
+The interesting part is that by  
+1) storing a reference to an instance of a class that
+has some desired method as a member, 
+2) along with an array of Class objects mirroring the 
+method parameter list,
+3) it is possible to create a java.lang.reflect.Method object 
+and keep it, pass it around, pool it - and execute it 
+from where-ever.
+Even doing complex variations of parameters and return types. It's neat!
 # A basic basic pattern to start using a MeRef<V,O>
 
 * You need a reference to an Object that will execute the method 
