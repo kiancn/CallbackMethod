@@ -27,12 +27,16 @@ Personally I like the generics much better, but both versions work fine.
 
 
 # Short Explanation
+The MethodedReferences and MeRefs are basically wrapper classes for Method objects;
+The canonical Reflections library has a beautiful collection of classes
+the interesting part is that by storing a reference to an instance of a class that
+has the method as a member
 # A basic basic pattern to start using a MeRef<V,O>
 
 * You need a reference to an Object that will execute the method 
-* You need a MeRef<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 * You need a Method or the string name of a method - as here; there are many constructors.
 * You need a Class or Class[] of the type/types of parameters the method takes (and primary types act different and need an array to accept even a single parameter (at construction)).
+* Then you can create a MeRef<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 
 Let's say there is a class called: 
 
