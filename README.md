@@ -1,6 +1,11 @@
 # Method References
     package kcn.methodreferencing
 
+        * I just this minute discovered that THE TERM 'Method Reference' is already taken in Java. *
+        * Ga'd darn it. Java is new to me. My Method References are different, they are objects    *
+        * not lambda-expressions. Everything will be renamed. Suggestions?                         *
+
+
 In short:
 The Methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
 
