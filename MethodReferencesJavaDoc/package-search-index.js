@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"kcn.methodreferencing"},{"l":"kcn.misc"},{"l":"kcn.misc.MeRefPatternExample"}]

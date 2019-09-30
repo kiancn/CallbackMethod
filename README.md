@@ -1,7 +1,7 @@
 # Method References
     package kcn.methodreferencing
 
-        * I just this minute discovered that THE TERM 'Method Reference' is already taken in Java. *
+        * I just recently discovered that THE TERM 'Method Reference' is already taken in Java. *
         * Ga'd darn it. Java is new to me. My Method References are different, they are objects    *
         * not lambda-expressions. Everything will be renamed. Suggestions?                         *
 
@@ -74,7 +74,7 @@ Let's just say you get a reference to instance of that class like this:
                                                         // array of Class type objects that mirrors the
                                                         // parameter list of the sought after method.
 
-Now, if a method was to take this MeRef as a parameter type, it might look exactly like this:
+Now, if a method was to take this MeRef as a parameter type, it's parameter list might look exactly like this:
 
     void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... } 
  
@@ -92,8 +92,8 @@ and access the passed method : (like this in this case, there are a few run..(..
 <B>It very much works!</B>
 - it probably also has all sorts of issues I didn't discover; 
   * please write me about any issues you might be having!
-  * since it is a task to figure out exactly how to use the different features together
-   - without having see examples; so I'll make something up and make the existing better.  
+  * it is a task to figure out exactly how  one can use the different features together
+   without having see examples; so I'll make something up and make the existing better.  
 
 Finishing up: 
 * I hope the tests referenced in main Main are easy enough to read.
@@ -114,7 +114,7 @@ This is a proof of concept version and many possible features are missing. <i> P
 
 * Make an introduction to each feature of the classes (and possibly define a set of best practices...).
 
-* A few new constructors are coming up; when method-reference is created to reference a method on the same object as the method-references is being declared on, the constructor can be as simple as a single string (for no parameter methods), or a string and a Class[] . These options should exist.
+* A few new constructors are coming up; when method-reference is created to reference a method on the same object as the method-reference is being declared on, the constructor can be as simple as a single string (for no parameter methods), or a string and a Class[] . These options should exist.
 
 
 
@@ -126,7 +126,7 @@ This is a proof of concept version and many possible features are missing. <i> P
 
       kcn.misc.MeReferencePatternExample           
 
-* 
+
 * I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
 
 # Version Update Summaries
