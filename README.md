@@ -2,10 +2,6 @@
     package kcn.methodreferencing
 
 
-        * I just recently discovered that THE TERM 'Method Reference' is already taken in Java. *
-        * Ga'd darn it. Java is new to me. My Method References are different, they are objects  *
-        * not lambda-expressions. The new name is... Callback Methods, whootidoodle              *
-
 * Please substitute the terms (a) method reference and (b) MeRef for (a) callback method and (b) CallMe using the awesome power of imagination (just until I update the rest of this readme, promise; then you'll never have to imagine again)
 
 * Try the speed test enabled in main. It's like if racing was boring, not fast and not dangerous. Also, informative and exciting: Do more than 400 test rounds and achieve stable results.
@@ -19,17 +15,16 @@ Actually there are <b> CallbackMethods, CallbackPacks, CallMes<V,O> and CallPack
 * The CallbackMethods and CallbackPack are non-generic types and are ideal for simpler signalling tasks.
 
         * CallbackMethod   
-        * MethodPack        
+        * CallbackPack        
     
 These are non-generic versions that are very easy to pass around;
 but that have low type-safety and limited capabilities when it comes to parameters
 
-* The CallMes and CallPacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
+* The CallMe<V,O>s and CallPacks<V,O> can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
   many complex task types.
 
         * CallMe<V,O>        type instances are objects that contains a method you can execute whereever
         * CallPack<V,O>        type is a Glorified list of CallMes (but with exception handling)
-
 
 
 Personally I like the generics much better, but both versions work fine.
@@ -42,7 +37,7 @@ wrapper classes for java.lang.reflect.Method objects;
 The interesting part is that by  
 1) storing a reference to an instance of a class that
 has some desired method as a member, 
-2) along with an array of Class objects mirroring the 
+2) along with Class object(s) mirroring the 
 method parameter list,
 3) it is possible to create a java.lang.reflect.Method object 
 and keep it, pass it around, pool it - and execute it 
@@ -51,8 +46,8 @@ Even doing complex variations of parameters and return types. It's neat!
 # A basic basic pattern to start using a CallMe<V,O>
 
 * You need a reference to an Object that will execute the method 
-* You need a Method or the string name of a method - as here; there are many constructors.
-* You need a Class or Class[] of the type/types of parameters the method takes (and primary types act different and need an array to accept even a single parameter (at construction)).
+* You need a Method or the string name of a method (there are multiple constructors).
+* You need to list Class-objects of the type(s) of the parameters that the method takes.
 * Then you can create a CallMe<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 
 Let's say there is a class called: 
@@ -71,12 +66,11 @@ Let's just say you get a reference to instance of that class like this:
 
 
 <b>You then declare a CallMe with appropriate signature </b>
-
-    CallMe<Integer,String> reference = new CallMe<>(executingObject,          // method-executing object
-                                                   "methodName",            // identifier of method (aka name)
+    // Supplying Object instance executing method, name of method, and list each class in parameter list.
+    CallMe<Integer,String> reference = new CallMe<>(executingObject,  
+                                                   "methodName",           
                                                    int.class); 
-                                                        // array of Class type objects that mirrors the
-                                                        // parameter list of the sought after method.
+                                                      
 
 Now, if a method was to take this CallMe as a parameter type, it's parameter list might look exactly like this:
 
@@ -98,6 +92,7 @@ and access the passed method : (like this in this case, there are a few run..(..
   * please write me about any issues you might be having!
   * it is a task to figure out exactly how  one can use the different features together
    without having see examples; so I'll make something up and make the existing better.  
+   * In almost all the supplied examples I choose the construct the CallbackMethods/CallMes using the long-winded (<Object>,<Method>,<Var... Class> constructor, and it is close to unreadable, sorry. Better examples upcoming.
 
 Finishing up: 
 * I hope the tests referenced in main Main are easy enough to read. Update; they are not. Better examples, me.
