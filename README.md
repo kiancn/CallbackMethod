@@ -1,21 +1,22 @@
 # Callback Methods (formerly unknown as Method References)
     package kcn.methodreferencing
 
+
         * I just recently discovered that THE TERM 'Method Reference' is already taken in Java. *
         * Ga'd darn it. Java is new to me. My Method References are different, they are objects  *
         * not lambda-expressions. The new name is... Callback Methods, whootidoodle              *
 
 * Please substitute the terms (a) method reference and (b) MeRef for (a) callback method and (b) CallMe using the awesome power of imagination (just until I update the rest of this readme, promise; then you'll never have to imagine again)
 
-
+* Try the speed test enabled in main. It's like if racing was boring, not fast and not dangerous. Also, informative and exciting: Do more than 400 test rounds and achieve stable results.
 
 In short:
 The kcn.methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
 
 
-Actually there are <b> CallbackMethods, MethodPacks, CallMes and CallPacks </b>
+Actually there are <b> CallbackMethods, CallbackPacks, CallMes<V,O> and CallPacks<V,O> </b>
 
-* The CallbackMethods and MethodPack are non-generic types and are ideal for simpler signalling tasks.
+* The CallbackMethods and CallbackPack are non-generic types and are ideal for simpler signalling tasks.
 
         * CallbackMethod   
         * MethodPack        
@@ -27,7 +28,7 @@ but that have low type-safety and limited capabilities when it comes to paramete
   many complex task types.
 
         * CallMe<V,O>        type instances are objects that contains a method you can execute whereever
-        * MePack<V,O>        type is a Glorified list of CallMes (but with exception handling)
+        * CallPack<V,O>        type is a Glorified list of CallMes (but with exception handling)
 
 
 
