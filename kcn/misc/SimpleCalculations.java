@@ -44,6 +44,7 @@ public class SimpleCalculations
         return (countCoordinate.x () + countCoordinate.y())/coords.length;
     }
 
+    /* absolute non-sense, I know.. the point remains */
     public void longRounds(long count, long rounds)
     {
         PrintTestTime ( count, System.currentTimeMillis () );

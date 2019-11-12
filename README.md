@@ -1,30 +1,33 @@
-# Method References
+# Callback Methods (formerly unknown as Method References)
     package kcn.methodreferencing
 
         * I just recently discovered that THE TERM 'Method Reference' is already taken in Java. *
-        * Ga'd darn it. Java is new to me. My Method References are different, they are objects    *
-        * not lambda-expressions. Everything will be renamed. Suggestions?                         *
+        * Ga'd darn it. Java is new to me. My Method References are different, they are objects  *
+        * not lambda-expressions. The new name is... Callback Methods, whootidoodle              *
+
+* Please substitute the terms (a) method reference and (b) MeRef for (a) callback method and (b) CallMe using the awesome power of imagination (just until I update the rest of this readme, promise; then you'll never have to imagine again)
+
 
 
 In short:
-The Methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
+The kcn.methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
 
 
-Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
+Actually there are <b> CallbackMethods, MethodPacks, CallMes and CallPacks </b>
 
-* The MethodReferences and MethodPack are non-generic types and are ideal for simpler signalling tasks.
+* The CallbackMethods and MethodPack are non-generic types and are ideal for simpler signalling tasks.
 
-        * MethodReference   
+        * CallbackMethod   
         * MethodPack        
     
 These are non-generic versions that are very easy to pass around;
 but that have low type-safety and limited capabilities when it comes to parameters
 
-* The MeRefs and MePacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
+* The CallMes and CallPacks can do what the non-generics do - and much much more, and have a degree of type-safety and allow 
   many complex task types.
 
-        * MeRef<V,O>        type instances are objects that contains a method you can execute whereever
-        * MePack<V,O>       type is a Glorified list of MeRefs
+        * CallMe<V,O>        type instances are objects that contains a method you can execute whereever
+        * MePack<V,O>        type is a Glorified list of CallMes (but with exception handling)
 
 
 
@@ -32,7 +35,7 @@ Personally I like the generics much better, but both versions work fine.
 
 
 # Short Explanation
-The MethodedReferences and MeRefs are broadly speaking
+The CallbackMethods and CallMes are broadly speaking
 wrapper classes for java.lang.reflect.Method objects;
 
 The interesting part is that by  
@@ -44,12 +47,12 @@ method parameter list,
 and keep it, pass it around, pool it - and execute it 
 from where-ever.
 Even doing complex variations of parameters and return types. It's neat!
-# A basic basic pattern to start using a MeRef<V,O>
+# A basic basic pattern to start using a CallMe<V,O>
 
 * You need a reference to an Object that will execute the method 
 * You need a Method or the string name of a method - as here; there are many constructors.
 * You need a Class or Class[] of the type/types of parameters the method takes (and primary types act different and need an array to accept even a single parameter (at construction)).
-* Then you can create a MeRef<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
+* Then you can create a CallMe<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 
 Let's say there is a class called: 
 
@@ -66,17 +69,17 @@ Let's just say you get a reference to instance of that class like this:
 
 
 
-<b>You then declare a MeRef with appropriate signature </b>
+<b>You then declare a CallMe with appropriate signature </b>
 
-    MeRef<Integer,String> reference = new MeRef<>(executingObject,          // method-executing object
+    CallMe<Integer,String> reference = new CallMe<>(executingObject,          // method-executing object
                                                    "methodName",            // identifier of method (aka name)
-                                                   new Class[]{int.class}); 
+                                                   int.class); 
                                                         // array of Class type objects that mirrors the
                                                         // parameter list of the sought after method.
 
-Now, if a method was to take this MeRef as a parameter type, it's parameter list might look exactly like this:
+Now, if a method was to take this CallMe as a parameter type, it's parameter list might look exactly like this:
 
-    void someMethod(MeRef<Integer,String> aMethodToProcess){ ... content ... } 
+    void someMethod(CallMe<Integer,String> aMethodToProcess){ ... content ... } 
  
 You can then pass a reference to a method;
 
@@ -96,7 +99,7 @@ and access the passed method : (like this in this case, there are a few run..(..
    without having see examples; so I'll make something up and make the existing better.  
 
 Finishing up: 
-* I hope the tests referenced in main Main are easy enough to read.
+* I hope the tests referenced in main Main are easy enough to read. Update; they are not. Better examples, me.
   
 * Sorry for using custom wrapper classes in the examples (two 2d coordinate types).
 
@@ -122,12 +125,12 @@ This is a proof of concept version and many possible features are missing. <i> P
 * All files are heavily commented ( except when they aren't yet ).
 * A small set of test-scenarios is included in the package (and prepared for you in Main).
 
-* A new, less confusing example of a MeReference in action has been added (it's light!):
+* A new, less confusing example of a CallMe in action has been added (it's light!):
 
       kcn.misc.MeReferencePatternExample           
 
 
-* I'm sure there are still some places where I haven't replaced MeReference with MeRef in comments, please do this in your mind. Also, sorry.
+* I'm sure there are still some places where I haven't replaced CallMe with CallMe in comments, please do this in your mind. Also, sorry.
 
 # Version Update Summaries
     -- This will grow into a proper introduction. 2019/09/17 --
@@ -136,5 +139,5 @@ This is a proof of concept version and many possible features are missing. <i> P
       <I>v. 0.015 (one-tenth-of-one-tenth of the way, and then half that) 2019/09/18</i>
         - Major changes: a) name changes and b) complete rewrite of exception handling.
       <i>v. 0.01501 a) readability upgrades, examples less-confusing-made, b) minor changes in exception handling</i>
-      <i>v. 0.016 (IHoldMethodReference; gone b) many run-methods in packs; gone c) descriptive text less bad</i>     
+      <i>v. 0.016 (IHoldCallbackMethod; gone b) many run-methods in packs; gone c) descriptive text less bad</i>     
       <i>v. 0.0165 Better explanatory comments, minor changes in exception handling + renamings</i> 

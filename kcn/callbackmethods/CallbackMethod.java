@@ -1,4 +1,4 @@
-package kcn.methodreferencing;
+package kcn.callbackmethods;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,8 +14,8 @@ import java.util.Objects;
  * NB. Naming of run methods is mechanical and I don't really like it, but didn't come up with something
  * better yet.
  */
-public class MethodReference
-        implements IMethodReference
+public class CallbackMethod
+        implements ICallback
 {
 
 
@@ -33,7 +33,7 @@ public class MethodReference
     private int ExecutingObjectMissingCaught;
     private int MethodObjectMissingCaught;
 
-    public MethodReference(Object executingThing, Method method)
+    public CallbackMethod(Object executingThing, Method method)
     {
         methodToExecute = method;
         objectToExecuteMethodOn = executingThing;
@@ -42,7 +42,7 @@ public class MethodReference
         initializeExceptionsArray();
     }
 
-    public MethodReference(Object executingThing, String methodName)
+    public CallbackMethod(Object executingThing, String methodName)
     {
         try
         {
@@ -60,6 +60,23 @@ public class MethodReference
         initializeExceptionsArray();
     }
 
+    public CallbackMethod(Object executingThing, String methodName, Class... parameterTypes)
+    {
+        try
+        {
+            methodToExecute = executingThing.getClass().getMethod(methodName,parameterTypes);
+            methodToExecute.setAccessible(true); /* it should enable */
+        } catch(NoSuchMethodException e)
+        {
+            NoSuchMethodExceptionCaught++;
+        } catch(NullPointerException e)
+        {
+            NullPointerExceptionCaught++;
+        }
+        objectToExecuteMethodOn = executingThing;
+
+        initializeExceptionsArray();
+    }
     /*
       RUN METHODS
      */
@@ -89,7 +106,6 @@ public class MethodReference
 
     /**
      * Method executes the method referenced, returns void
-     *
      * @param inputParameter object type T the values of which will
      *                       be used as parameter when executing referenced  method.
      **/
@@ -122,6 +138,7 @@ public class MethodReference
     public <T> T run_paramT_reT(T inputParameter)
     {
         if(!isNullFound())
+//        if(!didExceptionsHappen())
         {
             try
             {
@@ -240,22 +257,24 @@ public class MethodReference
      *  to execute it's run methods.  */
 
     /**
-     * Method returns true if MethodReference is somehow broke:
+     * Method returns true if CallbackMethod is somehow broke:
      * either null is detected or exceptions have been caught.
      * <p>
      */
 
     public boolean isReferenceBroke()
     {
-        /* if any null is found, simply return true */
+        /* checking for null and going through already occurred exceptions */
+//        if(isNullFound()||didExceptionsHappen()){referenceIsBroke = true;}
+//        /* if any null is found, simply return true */
         referenceIsBroke = isNullFound();
-        /* else go through exceptions already caught */
+//        /* else go through exceptions already caught */
         referenceIsBroke = didExceptionsHappen();
 
         return referenceIsBroke;
     }
     /* NB: So, someone might wonder if an option is not
-     * missing throughout the code; namely the option to repair a MethodReference.
+     * missing throughout the code; namely the option to repair a CallbackMethod.
      * But no, I think that is a bad idea: finding out what actually went wrong consistently
      * and having ways to fix that just has too many arbitrary variables/angles.
      */

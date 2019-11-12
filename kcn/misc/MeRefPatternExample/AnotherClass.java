@@ -1,12 +1,12 @@
 package kcn.misc.MeRefPatternExample;
-import kcn.methodreferencing.MeRef;
+import kcn.callbackmethods.CallMe;
 
 class AnotherClass
 {
-    MeRef<Integer, String> processingMethod;
+    CallMe<Integer, String> processingMethod;
 
     public String makesStringsWithNumbers(int number, int numb)
     {
-        return processingMethod.run_VV(number, numb);
+        return processingMethod.run(number, numb);
     }
 }

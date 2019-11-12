@@ -1,6 +1,5 @@
-import kcn.misc.Example_DeclaringWithThisKeyword_ShowLogging;
+import kcn.misc.CallbackMethod_timeTest01;
 import kcn.misc.ExamplesOfMethodReferencing_A;
-import kcn.misc.MeRefPatternExample.ExampleMain;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -41,12 +40,13 @@ public class Main
         * and simplistic (but hopefully clear'ish) examples of how to use them.
         * */
 
-//        var examples = new ExamplesOfMethodReferencing_A();
-
+        var examples = new ExamplesOfMethodReferencing_A();
+//
 //        examples.test2_MeRef_ParametersVV_returnsO();
 //        examples.test7_PassingMePacksAround();
 
-
+        examples.runAllExamplesReadCode();
+//
 //        examples.test0_NonGenericMethodReference();
 //        examples.test1_MeRef_2parametersVV_returnsO();        /* I blame so many of these examples being */
 //        examples.test3_MeRef_2ParametersVV_OReturn();         /* run_VV on the fact that I am lazy.      */
@@ -54,6 +54,17 @@ public class Main
 //
 //        examples.test5_runObjV();
 //        examples.test6_MePackRunningSomeMeRefs();
+
+        CallbackMethod_timeTest01 timeTest = new CallbackMethod_timeTest01();
+
+        timeTest.testMenu();
+
+
+//        timeTest.multipleTests_In_10_Fold_Increments(1, 4,false);
+//        timeTest.multipleTests_In_10_Fold_Increments(2, 10,false);
+//        timeTest.multipleTests_In_10_Fold_Increments(2, 10,false);
+//        timeTest.multipleTests_In_Doubling_Increments(2, 16,false);
+
 
     }
 }

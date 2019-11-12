@@ -1,33 +1,36 @@
-package kcn.methodreferencing;
+package kcn.callbackmethods;
 
 import java.util.ArrayList;
 import java.util.List;
-/* 2019/09/19 added simple logging feature when a methodreference has failed and is removed, and other
+/* 2019/09/19 added simple logging feature when a callback method has failed and is removed, and other
 adjustments */
+/*2019/11/04 renamed MethodPack to CallbackPack */
 
 /**
- * A MethodPack contains a list of MeRefs;
+ * A CallbackMethodPack contains a list of CallbackMethods;
  * <p>  - it is able to execute a collection of no-parameter, no/void return type methods.
  * <p>  - it is able to execute a collection of single <V> parameter and no/void return type methods.
  * <p>
- * <p> - for other tasks contained MethodReferences are intended to be accessed and iterated over through
+ * <p> - for other tasks contained CallbackMethods are intended to be accessed and iterated over through
  * getMethods() .
- * <p><b>  - the MethodPack it is not strong on compiler-time type checking, be careful.
+ * <p> - Automatic checking for bad references is enabled by default:
+ * </p><p>enableAutoHandlingOfBadReferences(false) will turn off error checking.</p>
+ * <p><b>  - the CallbackMethodPack it is not strong on compiler-time type checking, be careful.
  * </b>
  * <p>
- * - the generic sibling MethodPathGeneric is much more versatile and much more type-safe
+ * - the generic sibling CallMePack is much more versatile and much more type-safe
  *
  * <p>
  */
-public class MethodPack
+public class CallbackPack
 {
-    private List<MethodReference> methods;
+    private List<CallbackMethod> methods;
 
     private boolean automaticErrorChecks; /* value of boolean effects all run method*/
     private int removedMethodsCount;
     private ArrayList<String> removedMethodsNamesList;
 
-    public MethodPack()
+    public CallbackPack()
     {
         methods = new ArrayList<>();
         removedMethodsNamesList = new ArrayList<>();
@@ -36,20 +39,20 @@ public class MethodPack
 
     }
 
-    public List<MethodReference> getMethods()
+    public List<CallbackMethod> getMethods()
     {
         return methods;
     }
 
     /**
      * Method executes a collection of no-parameter, no/void return type methods.
-     * Actually, it is run() on each MethodReference in methods that is executed...
+     * Actually, it is run() on each CallbackMethod in methods that is executed...
      **/
     public void run()
     {
         if(automaticErrorChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods) { method.run(); }
+        for(CallbackMethod method : methods) { method.run(); }
     }
 
     /**
@@ -59,14 +62,14 @@ public class MethodPack
     {
         if(automaticErrorChecks){ handleBadReferences(); }
 
-        for(MethodReference method : methods) { method.run_paramT(value); }
+        for(CallbackMethod method : methods) { method.run_paramT(value); }
     }
 
 
     /**
      * Method adds a MethodReference object to internal list
      **/
-    public boolean add(MethodReference method)
+    public boolean add(CallbackMethod method)
     {
         methods.add(method);
         return true;
@@ -75,7 +78,7 @@ public class MethodPack
     /**
      * Method adds a MethodReference object to internal list
      **/
-    public boolean remove(MethodReference method)
+    public boolean remove(CallbackMethod method)
     {
         if(methods.contains(method))
         {
@@ -108,23 +111,26 @@ public class MethodPack
      **/
     public void handleBadReferences()
     {
-        for(MethodReference mr : methods)
+        for(CallbackMethod callback : methods)
         {
-            if(mr.isReferenceBroke())
+            if(callback.isReferenceBroke())
             {
                 /* getting the name down before ejecting the bad apple */
-                removedMethodsNamesList.add(mr.getMethodObject().getName());
-                methods.remove(mr);
+                removedMethodsNamesList.add(callback.getMethodObject().getName());
+                methods.remove(callback);
                 removedMethodsCount++;
             }
         }
     }
 
     /**
-     * Get length of methods list
+     * Get length of methods list.
      */
     public int length(){ return methods.size(); }
-
+    /**
+     * Returns the number of methods removed from this pack; a method is removed if it reports that it is
+     * any kind of faulty.
+     */
     public int getRemovedMethodsCount(){ return removedMethodsCount; }
 
     public ArrayList<String> getRemovedMethodsNamesList(){ return removedMethodsNamesList; }

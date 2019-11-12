@@ -1,4 +1,4 @@
-package kcn.methodreferencing;
+package kcn.callbackmethods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +32,9 @@ import java.util.List;
  * crashing that system.
  * It also means that user needs to take direct responsibility for broken MeRefs.
  */
-public class MePack<V, O>
+public class CallPack<V, O>
 {
-    private List<MeRef<V, O>> methods; /* contained MeRefs*/
+    private List<CallMe<V, O>> methods; /* contained MeRefs*/
     private boolean alwaysCheckIfBroke; /* value of boolean effects all run methods */
     private ArrayList<String> removedMethodNames; /* names of dysfunctional, removed MeRefs */
 
@@ -43,9 +43,9 @@ public class MePack<V, O>
      * <p> NB. Not supplying anything inside the diamonds, ie. defaulting V,O
      * gives V, O the values of Object, Object </p>
      */
-    public MePack()
+    public CallPack()
     {
-        this.methods = new ArrayList<MeRef<V, O>>();
+        this.methods = new ArrayList<CallMe<V, O>>();
         removedMethodNames = new ArrayList<String>();
     }
 
@@ -56,9 +56,9 @@ public class MePack<V, O>
      * not further tied to the function of the MePack.
      * <p>
      */
-    public MePack(List<MeRef<V, O>> methodReferences)
+    public CallPack(List<CallMe<V, O>> methodReferences)
     {
-        this.methods = new ArrayList<MeRef<V, O>>();
+        this.methods = new ArrayList<CallMe<V, O>>();
         methods.addAll(methodReferences);
         removedMethodNames = new ArrayList<String>();
 
@@ -67,7 +67,7 @@ public class MePack<V, O>
     /**
      * Method returns the internal list of MeRefs for your running pleasure.
      */
-    public List<MeRef<V, O>> getMeRefs()
+    public List<CallMe<V, O>> getMeRefs()
     {
         return methods;
     }
@@ -81,7 +81,7 @@ public class MePack<V, O>
     {
         if(alwaysCheckIfBroke){ handleBadReferences(); }
 
-        for(MeRef<V, O> method : methods)
+        for(CallMe<V, O> method : methods)
         {
             method.run();
         }
@@ -96,7 +96,7 @@ public class MePack<V, O>
     {
         if(alwaysCheckIfBroke){ handleBadReferences(); }
 
-        for(MeRef<V, O> method : methods)
+        for(CallMe<V, O> method : methods)
         {
             method.run(value);
         }
@@ -108,7 +108,7 @@ public class MePack<V, O>
      * <p></p><p> And several references to the same MeRef is not a problem;
      * that really depends on your task as such.</p>
      */
-    public void add(MeRef<V, O> method)
+    public void add(CallMe<V, O> method)
     {
         methods.add(method);
     }
@@ -117,7 +117,7 @@ public class MePack<V, O>
      * Method adds supplied MeRef only if it is not already on methods-list,
      * returns true if insert was successful, false if duplicates were found.
      */
-    public boolean addNoDuplicates(MeRef<V, O> method)
+    public boolean addNoDuplicates(CallMe<V, O> method)
     {
 
         boolean duplicateFound = false;
@@ -143,7 +143,7 @@ public class MePack<V, O>
      * Returns true if method could be and was removed,
      * otherwise false;
      */
-    public boolean remove(MeRef<V, O> method)
+    public boolean remove(CallMe<V, O> method)
     {
         if(methods.contains(method))
         {
@@ -168,7 +168,7 @@ public class MePack<V, O>
      **/
     public void handleBadReferences()
     {
-        for(MeRef<V, O> methodReference : methods)
+        for(CallMe<V, O> methodReference : methods)
         {
             if(methodReference.isReferenceBroke())
             {   /* Adding name of method to be removed, to a log/list removedMethods   */

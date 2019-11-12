@@ -1,10 +1,10 @@
-package kcn.methodreferencing;
+package kcn.callbackmethods;
 
 import java.lang.reflect.Method;
 /* though the generic and the non-generic types of references cannot go into each others containers,
 * there are other task for which users would/might like to access them as one kind of thing
 * */
-public interface IMethodReference
+public interface ICallback
 {
     /* method will return true if implementing method reference has detected exceptions or nulls (and thus
     made itself inert.) */

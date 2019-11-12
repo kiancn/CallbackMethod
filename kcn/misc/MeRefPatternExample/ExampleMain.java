@@ -1,9 +1,5 @@
 package kcn.misc.MeRefPatternExample;
 
-import kcn.methodreferencing.MeRef;
-
-import java.lang.reflect.InvocationTargetException;
-
 /* I am aware that coding standards have not been kept premium
  through-out example; it is written this way for clarity */
 

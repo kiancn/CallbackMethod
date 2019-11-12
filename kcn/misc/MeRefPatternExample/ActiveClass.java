@@ -1,6 +1,6 @@
 package kcn.misc.MeRefPatternExample;
 
-import kcn.methodreferencing.MeRef;
+import kcn.callbackmethods.CallMe;
 
 
 public class ActiveClass
@@ -14,16 +14,16 @@ public class ActiveClass
         /* Declaring/constructing the MeReference */ /* PLEASE NOTE: a MeRef will become inert if not
         declared right; it logs the failure internally, and that information is easy to come by, check out
         the exposed methods of both MeRef and MePack */
-        MeRef<Integer, String> reference = new MeRef<>(executingObject,
-                                                       "addTwoNumbers",
-                                                       new Class[]{int.class, int.class});
+        CallMe<Integer, String> reference = new CallMe<>(executingObject,
+                                                         "addTwoNumbers",
+                                                         new Class[]{int.class, int.class});
         /* Turning off automatic pre-emptive null checks null */
         reference.setPersistentNullChecks(false);
 
         /* Declaring another MeRef, for another method */
-        MeRef<Integer, String> reference1 = new MeRef<Integer, String>(executingObject,
-                                                                       "numberToString",
-                                                                       new Class[]{int.class});
+        CallMe<Integer, String> reference1 = new CallMe<Integer, String>(executingObject,
+                                                                         "numberToString",
+                                                                         new Class[]{int.class});
 
 
         /* this class has a field for a method-reference (and execute it through another method) */

@@ -1,6 +1,6 @@
 package kcn.misc;
 
-import kcn.methodreferencing.MePack;
+import kcn.callbackmethods.CallMePack;
 
 import java.util.ArrayList;
 
@@ -10,16 +10,18 @@ Class mocks the function of an object that fires packs of MeRefs on command */
 public class ExampleMethodsClass_B
 {
 
-    MePack<String, String> clientMethods;
+    CallMePack<String, String> clientMethods;
     String[] stringArray;
 
     ArrayList<String> receivedStrings;
 
     ArrayList<String> processedStrings;
 
+
+
     public ExampleMethodsClass_B()
     {
-        clientMethods = new MePack<>();
+        clientMethods = new CallMePack<>();
         receivedStrings = new ArrayList<>();
         processedStrings = new ArrayList<>();
     }
@@ -27,14 +29,14 @@ public class ExampleMethodsClass_B
     public void processStringArray()
     {
         System.out.println("Processesing recieved strings with received methods.");
-        for(int i = 0; i < stringArray.length - 1; i++)
+        for(int i = 0; i < stringArray.length - 2; i++)
         {
             processStringPairWithMePack(clientMethods, stringArray[i], stringArray[i + 1]);
         }
 
     }
 
-    private void processStringPairWithMePack(MePack<String, String> mePack, String string1, String string2)
+    private void processStringPairWithMePack(CallMePack<String, String> mePack, String string1, String string2)
     {
         System.out.println("\n Newly processing strings 1:");
         for(int i = 0; i < mePack.getMeRefs().size(); i++)

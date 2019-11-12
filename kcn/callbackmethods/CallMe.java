@@ -1,4 +1,4 @@
-package kcn.methodreferencing;
+package kcn.callbackmethods;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,8 +22,8 @@ import java.util.Objects;
  * * Object type (in parameters and return types) is here to allow manual type
  *  casting and greater flexibility.
  **/
-public class MeRef<V, O>
-        implements IMethodReference
+public class CallMe<V, O>
+        implements ICallback
 {
     /* ~<>~ Fields ~<>~ */
 
@@ -48,7 +48,7 @@ public class MeRef<V, O>
 
     /* A proper description of the practical cases for each constructor is needed and upcoming  */
 
-    public MeRef(Object executingObject, Method methodThatWillBeExecuted)
+    public CallMe(Object executingObject, Method methodThatWillBeExecuted)
     {
         objectReference = executingObject;
         method = methodThatWillBeExecuted;
@@ -56,7 +56,7 @@ public class MeRef<V, O>
         initializeExceptionsArray();
     }
 
-    public MeRef(Object executingObject, String methodName)
+    public CallMe(Object executingObject, String methodName)
     {
         objectReference = executingObject;
         try
@@ -71,7 +71,23 @@ public class MeRef<V, O>
         initializeExceptionsArray();
     }
 
-    public MeRef(Object executingObject, String methodName, Class[] argClasses)
+//    public CallMe(Object executingObject, String methodName, Class[] argClasses)
+//    {
+//        this.argClasses = argClasses;
+//        objectReference = executingObject;
+//        try
+//        {
+//            method = executingObject.getClass().getMethod(methodName, argClasses);
+//        } catch(NoSuchMethodException e)
+//        {
+//            NoSuchMethodExceptionCaught++;
+//            shortCircuitRun = true;
+//        }
+//        persistentNullChecks = true; /* safety by default */
+//        initializeExceptionsArray();
+//    }
+
+    public CallMe(Object executingObject, String methodName, Class... argClasses)
     {
         this.argClasses = argClasses;
         objectReference = executingObject;
@@ -92,7 +108,7 @@ public class MeRef<V, O>
      * references the other option is to pull getExecutingObject() and getExceptionsCaught()
      * and do handle possible exceptions manually
      */
-    public MeRef(Object executingObject, String methodName, boolean handleHealthChecksAutomatically)
+    public CallMe(Object executingObject, String methodName, boolean handleHealthChecksAutomatically)
     {
         objectReference = executingObject;
         try
@@ -107,7 +123,7 @@ public class MeRef<V, O>
         initializeExceptionsArray();
     }
 
-    public MeRef(Object executingObject, Method methodThatWillBeExecuted, boolean handleHealthChecksAutomatically)
+    public CallMe(Object executingObject, Method methodThatWillBeExecuted, boolean handleHealthChecksAutomatically)
     {
         objectReference = executingObject;
         method = methodThatWillBeExecuted;
@@ -176,7 +192,8 @@ public class MeRef<V, O>
      * and returns a type O object.
      **/
     @SuppressWarnings("unchecked") /* same (see run() )*/
-    public O run_VV(V vValueA, V vValueB)
+//    public O run_VV(V vValueA, V vValueB)
+    public O run(V... values)
     {
 
         if(persistentNullChecks){ isNullFound(); }
@@ -184,7 +201,7 @@ public class MeRef<V, O>
         {
             try
             {
-                return (O)method.invoke(objectReference, vValueA, vValueB);
+                return (O)method.invoke(objectReference, values);
             } catch(IllegalAccessException e)
             {
                 IllegalAccessExceptionCaught++;
@@ -200,36 +217,37 @@ public class MeRef<V, O>
     /**
      * Method takes an array of objects of type V and returns an object of type O.
      * <p></p><b>LIMITS:</b><p>
-     * <i> * cannot be used to return an array of primary types! </i><p>
+     * <i> * cannot be used to return an array of primary types! ( use wrapper classes )</i><p>
      *
      * @param valuesArray an array of type V objects.
      * @return object of type O
      **/
-    @SuppressWarnings("unchecked")
-    public O run(V[] valuesArray)
-    {
-        if(persistentNullChecks){ isNullFound(); }
-
-        if(!shortCircuitRun)
-        {
-            try
-            {
-                return (O)method.invoke(objectReference, new Object[]{valuesArray});
-            } catch(IllegalAccessException e)
-            {
-                IllegalAccessExceptionCaught++;
-            } catch(InvocationTargetException e)
-            {
-                InvocationTargetExceptionCaught++;
-            }
-        }
-
-        return null;
-    }
+//    @SuppressWarnings("unchecked")
+//    public O run(V[] valuesArray)
+//    {
+//        if(persistentNullChecks){ isNullFound(); }
+//
+//        if(!shortCircuitRun)
+//        {
+//            try
+//            {
+//                return (O)method.invoke(objectReference, new Object[]{valuesArray});
+//            } catch(IllegalAccessException e)
+//            {
+//                IllegalAccessExceptionCaught++;
+//            } catch(InvocationTargetException e)
+//            {
+//                InvocationTargetExceptionCaught++;
+//            }
+//        }
+//
+//        return null;
+//    }
 
     /**
      * Method takes a Object-object and a V-object as arguments, and returns an
      * O-type object.
+     * <p><b>Functionality exactly parallel to all the run(..) methods!</b></p>
      * <p></p><p> - method takes first a parameter object of type Object
      * <p> - then method takes a parameter object type V
      * <p> - method returns a type O object
@@ -238,7 +256,7 @@ public class MeRef<V, O>
      * something useful.* </b>
      * <p>
      * - Method is named different because the compiler cannot distinguish between
-     * run(V,V) and run(Object,V), - and so run_ObjV was born.
+     * run(V,V) and run(Object,V), - and so execute(..) was born.
      * Sorry for the confusion. </p>
      *
      * @param inputObject Object type object; any object (remember to type cast in
@@ -247,7 +265,7 @@ public class MeRef<V, O>
      * @return an O-type object
      */
     @SuppressWarnings("unchecked") /* same (see run() */
-    public O run_ObjV(Object inputObject, V value)
+    public O execute(Object inputObject, V value)
     {
         /* if autoHandle.. is true, check if object is null*/
         if(persistentNullChecks){ isNullFound(); }
@@ -284,7 +302,7 @@ public class MeRef<V, O>
      * @return object of type O
      **/
     @SuppressWarnings("unchecked") /* same (see run() )*/
-    public O run(Object inputObject, V[] valuesArray)
+    public O run(Object inputObject, V... valuesArray)
     {
         if(persistentNullChecks){ isNullFound();}
         if(!shortCircuitRun)
@@ -293,7 +311,7 @@ public class MeRef<V, O>
             {
                 return (O)method.invoke(objectReference,
                                         inputObject,
-                                        new Object[]{valuesArray});
+                                        valuesArray);
             } catch(IllegalAccessException e)
             {
                 IllegalAccessExceptionCaught++;
