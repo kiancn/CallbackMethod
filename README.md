@@ -5,9 +5,11 @@
         * Ga'd darn it. Java is new to me. My Method References are different, they are objects    *
         * not lambda-expressions. Everything will be renamed. Suggestions?                         *
 
+* <b>Pssst! ... Pssssst! All the cool kids are watching the Callback Method branch now. </b>
+* Conclusion: There are not many cool kids. 
 
 In short:
-The Methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
+<b>The kcn.methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.</b>
 
 
 Actually there are <b> MethodReferences, MethodPacks, MeRefs and MePacks </b>
