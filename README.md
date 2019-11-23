@@ -64,13 +64,13 @@ Let's just say you get a reference to instance of that class like this:
     ImportantClass executingObject = new ImportantClass();
 
 
-
 <b>You then declare a CallMe with appropriate signature </b>
+
     // Supplying Object instance executing method, name of method, and list each class in parameter list.
+    
     CallMe<Integer,String> reference = new CallMe<>(executingObject,  
                                                    "methodName",           
-                                                   int.class); 
-                                                      
+                                                   int.class);                                                       
 
 Now, if a method was to take this CallMe as a parameter type, it's parameter list might look exactly like this:
 
