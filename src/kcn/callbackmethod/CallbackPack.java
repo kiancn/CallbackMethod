@@ -1,4 +1,4 @@
-package kcn.callbackmethods;
+package kcn.callbackmethod;
 
 import java.util.ArrayList;
 import java.util.List;

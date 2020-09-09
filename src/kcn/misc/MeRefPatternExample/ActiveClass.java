@@ -1,6 +1,6 @@
 package kcn.misc.MeRefPatternExample;
 
-import kcn.callbackmethods.CallMe;
+import kcn.callbackmethod.CallMe;
 
 
 public class ActiveClass

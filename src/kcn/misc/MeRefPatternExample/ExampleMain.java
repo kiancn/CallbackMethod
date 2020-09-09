@@ -3,8 +3,8 @@ package kcn.misc.MeRefPatternExample;
 /* I am aware that coding standards have not been kept premium
  through-out example; it is written this way for clarity */
 
-import kcn.callbackmethods.CallMe;
-import kcn.callbackmethods.CallbackMethod;
+import kcn.callbackmethod.CallMe;
+import kcn.callbackmethod.CallbackMethod;
 import kcn.misc.Int3;
 
 public class ExampleMain

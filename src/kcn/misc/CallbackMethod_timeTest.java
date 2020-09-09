@@ -1,7 +1,7 @@
 package kcn.misc;
 
-import kcn.callbackmethods.CallMe;
-import kcn.callbackmethods.CallbackMethod;
+import kcn.callbackmethod.CallMe;
+import kcn.callbackmethod.CallbackMethod;
 
 import java.util.Arrays;
 

@@ -1,5 +1,5 @@
 # Callback Methods (formerly unknown as Method References)
-    package kcn.methodreferencing
+    package kcn.callbackmethod
 
 
 * Please substitute the terms (a) method reference and (b) MeRef for (a) callback method and (b) CallMe using the awesome power of imagination (just until I update the rest of this readme, promise; then you'll never have to imagine again)
@@ -7,7 +7,7 @@
 * Try the speed test enabled in main. It's like if racing was boring, not fast and not dangerous. Also, informative and exciting: Do more than 400 test rounds and achieve stable results.
 
 In short:
-The kcn.methodreferencing package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
+The kcn.callbackmethod package allows you to pass methods along as references & to pack methods together to store, pass along and execute at will.
 
 
 Actually there are <b> CallbackMethods, CallbackPacks, CallMes<V,O> and CallPacks<V,O> </b>
@@ -38,7 +38,7 @@ The interesting part is that by
 1) storing a reference to an instance of a class that
 has some desired method as a member, 
 2) along with Class object(s) mirroring the 
-method parameter list,
+method parameter list (usually not necessary in practise, see constructors),
 3) it is possible to create a java.lang.reflect.Method object 
 and keep it, pass it around, pool it - and execute it 
 from where-ever.
@@ -47,7 +47,7 @@ Even doing complex variations of parameters and return types. It's neat!
 
 * You need a reference to an Object that will execute the method 
 * You need a Method or the string name of a method (there are multiple constructors).
-* You need to list Class-objects of the type(s) of the parameters that the method takes.
+* You need to list Class-objects of the type(s) of the parameters that the method takes (only necessary if method is overloaded).
 * Then you can create a CallMe<V,O> - (V is always paramater type, and O is return type. <i>Mostly, consult run..(..)-method comments</i>) 
 
 Let's say there is a class called: 

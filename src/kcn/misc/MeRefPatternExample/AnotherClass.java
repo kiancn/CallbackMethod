@@ -1,5 +1,5 @@
 package kcn.misc.MeRefPatternExample;
-import kcn.callbackmethods.CallMe;
+import kcn.callbackmethod.CallMe;
 
 class AnotherClass
 {
