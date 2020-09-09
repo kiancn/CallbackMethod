@@ -3,149 +3,130 @@ package kcn.misc;
 import kcn.callbackmethods.CallMe;
 import kcn.callbackmethods.CallbackMethod;
 
-public class CallbackMethod_timeTest01
+import java.util.Arrays;
+
+public class CallbackMethod_timeTest
 {
-    CallbackMethod test_SquareRoot;
+    CallbackMethod test_CalcSmth;
 
-    CallMe<Long,Long> testG_SquareRoot;
+    CallMe<Integer, Integer> testG_CalcSmth;
 
 
-
-    public CallbackMethod_timeTest01()
+    public CallbackMethod_timeTest()
     {
-        test_SquareRoot = new CallbackMethod((Object)this, "calcSquareRoot", long.class);
+        test_CalcSmth = new CallbackMethod((Object)this, "calulateSomething", int.class);
         System.out.println("CallbackMethod tested " +
-                           (test_SquareRoot.isReferenceBroke() ? "positive" : "negative") +
+                           (test_CalcSmth.isReferenceBroke() ? "positive" : "negative") +
                            " for internal errors/exceptions.");
 
-        testG_SquareRoot = new CallMe<Long, Long>((Object)this,"calcSquareRoot",long.class);
+        testG_CalcSmth = new CallMe<Integer, Integer>((Object)this, "calulateSomething", int.class);
         System.out.println("CallMe tested " +
-                           (testG_SquareRoot.isReferenceBroke() ? "positive" : "negative") +
+                           (testG_CalcSmth.isReferenceBroke() ? "positive" : "negative") +
                            " for internal errors/exceptions.");
-//        testG_SquareRoot.setPersistentNullChecks(false);
+        testG_CalcSmth.setPersistentNullChecks(false);
     }
 
-    public long calcSquareRoot(long input)
+    public int calulateSomething(int input)
     {
-        return (long)Math.sqrt(input)/2+2*input;
+        return (int)Math.sqrt(input) / 2 + 2 * input;
     }
 
-    public void multipleTests(long iterationsOffset, int numberOfIncrements,
+    public void multipleTests(long iterationsOffset, int numberOfTests,
                               boolean verboseReport)
     {
-        if(!verboseReport)
+        for(int count = 0; count < numberOfTests; count++)
         {
-            for(int count = 0; count < numberOfIncrements; count++)
-            {
-                System.out.print(" " + count + "\n");
-                test_briefReport((int)iterationsOffset);
-                }
-        } else
-        {
-            for(int count = 0; count < numberOfIncrements; count++)
-            { test((int)(iterationsOffset)); }
+            System.out.print(" " + count + "\n");
+            test_briefReport((int)iterationsOffset);
         }
-        System.out.println("");
     }
 
     public void multipleTests_In_10_Fold_Increments(long iterationsOffset, int numberOfIncrements,
                                                     boolean verboseReport)
     {
-        if(!verboseReport)
-        {
-            for(int count = 0; count < numberOfIncrements; count++)
-            { test_briefReport((int)(iterationsOffset * Math.pow(10, count))); }
-        } else
-        {
-            for(int count = 0; count < numberOfIncrements; count++)
-            { test((int)(iterationsOffset * Math.pow(10, count))); }
-        }
+        for(int count = 0; count < numberOfIncrements; count++)
+        { test_briefReport((int)(iterationsOffset * Math.pow(10, count))); }
     }
 
     public void multipleTests_In_Doubling_Increments(long iterationsOffset, int numberOfIncrements,
                                                      boolean verboseReport)
     {
-        if(!verboseReport)
-        {
-            for(int count = 0; count < numberOfIncrements; count++)
-            { test_briefReport((int)(iterationsOffset * Math.pow(2, count))); }
-        } else
-        {
-        }
+        for(int count = 0; count < numberOfIncrements; count++)
+        { test_briefReport((int)(iterationsOffset * Math.pow(2, count))); }
     }
 
 
-    public boolean test(int iterations)
-    {
-        long result1 = 0;
-        long result2 = 0;
-
-
-        long ordinaryMethodTestDuration = 0;
-        long callbackMethodTestDuration = 0;
-        long testStart = 0;
-        long testStart1 = 0;
-
-        System.out.println("\n\t>> Running " + iterations + " tests <<\n");
-
-        /*
-         Instance method execution test, running as many times as the iteration value defines
-          */
-
-        System.out.println("\tOrdinary method test commencing.");
-
-        testStart = System.nanoTime();
-        for(int i = 0; i < iterations; i++) { result1 += calcSquareRoot(i); } // THE TEST
-
-        System.out.println("Test started at: " + String.format("%26d", testStart));
-        ordinaryMethodTestDuration = System.nanoTime() - testStart;
-        System.out.println("Ordinary Test nanos:\t" + String.format("%20d", ordinaryMethodTestDuration));
-
-        /*
-         Callback Method execution test, running as many times as the iteration value defines
-          */
-        if(!test_SquareRoot.isReferenceBroke())
-        {
-
-            System.out.println("\tCallback method test commencing.");
-
-            testStart1 = System.nanoTime();
-            for(long i = 0; i < iterations; i++) { result2 += test_SquareRoot.run_paramT_reT(i); } // THE TEST
-            callbackMethodTestDuration = System.nanoTime() - testStart1;
-
-            System.out.println("Test starting at: " + String.format("%26d", testStart1));
-
-            System.out.println("Callback test nanos:\t" + String.format("%20d", callbackMethodTestDuration));
-
-        } else
-        {
-            System.out.println("Your callback done broke.");
-            return false;
-        }
-
-        /* Report stuff */
-        System.out.println("\tRESULTS");
-        System.out.println("Ordinary method is "
-                           + ((ordinaryMethodTestDuration < callbackMethodTestDuration) ? "FASTER" : "SLOWER")
-                           + " than the callback." +
-                           "\nOrdinary Method test:\t " + String.format("%19d", ordinaryMethodTestDuration) +
-                           "\nCallback Method test:\t " + String.format("%19d", callbackMethodTestDuration) +
-
-                           "\nCallback %-time difference:\t " + percentDifference(ordinaryMethodTestDuration,
-                                                                                  callbackMethodTestDuration) + "%");
-        /* Checking if methods worked the same */
-        System.out.println("\nOrdinary Test checksum:\t" + result1);
-        System.out.println("Callback Test checksum:\t" + result2 + "\n");
-
-        return true;
-    }
+//    public boolean test(int iterations)
+//    {
+//        long result1 = 0;
+//        long result2 = 0;
+//
+//
+//        long ordinaryMethodTestDuration = 0;
+//        long callbackMethodTestDuration = 0;
+//        long testStart1 = 0;
+//        long testStart2 = 0;
+//
+//        System.out.println("\n\t>> Running " + iterations + " tests <<\n");
+//
+//        /*
+//         Instance method execution test, running as many times as the iteration value defines
+//          */
+//
+//        System.out.println("\tOrdinary method test commencing.");
+//
+//        testStart1 = System.nanoTime();
+//        for(int i = 0; i < iterations; i++) { result1 += calulateSomething(i); } // THE TEST
+//
+//        System.out.println("Test started at: " + String.format("%26d", testStart1));
+//        ordinaryMethodTestDuration = System.nanoTime() - testStart1;
+//        System.out.println("Ordinary Test nanos:\t" + String.format("%20d", ordinaryMethodTestDuration));
+//
+//        /*
+//         Callback Method execution test, running as many times as the iteration value defines
+//          */
+////        if(!test_SquareRoot.isReferenceBroke())
+////        {
+//
+//            System.out.println("\tCallback method test commencing.");
+//
+//            testStart2 = System.nanoTime();
+//            for(long i = 0; i < iterations; i++) { result2 += test_CalcSmth.run_paramT_reT(i); } // THE TEST
+//            callbackMethodTestDuration = System.nanoTime() - testStart2;
+//
+//            System.out.println("Test starting at: " + String.format("%26d", testStart2));
+//
+//            System.out.println("Callback test nanos:\t" + String.format("%20d", callbackMethodTestDuration));
+//
+////        } else
+////        {
+////            System.out.println("Your callback done broke.");
+////            return false;
+////        }
+//
+//        /* Report stuff */
+//        System.out.println("\tRESULTS");
+//        System.out.println("Ordinary method is "
+//                           + ((ordinaryMethodTestDuration < callbackMethodTestDuration) ? "FASTER" : "SLOWER")
+//                           + " than the callback." +
+//                           "\nOrdinary Method test:\t " + String.format("%19d", ordinaryMethodTestDuration) +
+//                           "\nCallback Method test:\t " + String.format("%19d", callbackMethodTestDuration) +
+//
+//                           "\nCallback %-time difference:\t " + percentDifference(ordinaryMethodTestDuration,
+//                                                                                  callbackMethodTestDuration) + "%");
+//        /* Checking if methods worked the same */
+//        System.out.println("\nOrdinary Test checksum:\t" + result1);
+//        System.out.println("Callback Test checksum:\t" + result2 + "\n");
+//
+//        return true;
+//    }
 
     public boolean test_briefReport(int iterations)
     {
 
-        long result1 = 0;
-        long result2 = 0;
-        long result3 = 0;
+        int result1 = 0;
+        int result2 = 0;
+        int result3 = 0;
 
         long baselineMethodTestDuration = 0;
         long callbackMethodTestDuration = 0;
@@ -157,34 +138,36 @@ public class CallbackMethod_timeTest01
 
 
         /* Callback Method execution test, running as many times as the iteration value defines*/
-        if(!test_SquareRoot.isReferenceBroke())
+        if(!test_CalcSmth.isReferenceBroke())
         {
             callMeTestStart = System.nanoTime();
-            for(long i = 0; i < iterations; i++) { result3 += testG_SquareRoot.run(i); } // THE
+            for(int i = 0; i < iterations; i++) { result3 += testG_CalcSmth.run(i); } // THE
             // TEST
             callMeTestDuration = System.nanoTime() - callMeTestStart;
         } else
         {
             System.out.println("Your callback done broke.");
+            System.out.println(Arrays.toString(testG_CalcSmth.getExceptionsCaught()));
             return false;
         }
         /*+++++++++++++++++++++++++++++++++*/
 
         /*  Instance method execution test, running as many times as the iteration value defines */
         baselineTestStart = System.nanoTime();
-        for(long i = 0; i < iterations; i++) { result1 += calcSquareRoot(i); } // THE TEST
+        for(int i = 0; i < iterations; i++) { result1 += calulateSomething(i); } // THE TEST
         baselineMethodTestDuration = System.nanoTime() - baselineTestStart;
         /*+++++++++++++++++++++++++++++++++*/
 
         /* Callback Method execution test, running as many times as the iteration value defines*/
-        if(!test_SquareRoot.isReferenceBroke())
+        if(!test_CalcSmth.isReferenceBroke())
         {
             callbackTestStart = System.nanoTime();
-            for(long i = 0; i < iterations; i++) { result2 += test_SquareRoot.run_paramT_reT(i); } // THE TEST
+            for(int i = 0; i < iterations; i++) { result2 += (int)test_CalcSmth.run(i); } // THE TEST
             callbackMethodTestDuration = System.nanoTime() - callbackTestStart;
         } else
         {
             System.out.println("Your callback done broke.");
+            System.out.println(Arrays.toString(test_CalcSmth.getExceptionsCaught()));
             return false;
         }
         /*+++++++++++++++++++++++++++++++++*/
@@ -198,7 +181,7 @@ public class CallbackMethod_timeTest01
                          " <Callback %-time diff:\t " +
                          percentDifference(baselineMethodTestDuration,
                                            callbackMethodTestDuration)
-                         + "% >" +" <CallMe %-time diff: " +
+                         + "% >" + " <CallMe %-time diff: " +
                          percentDifference(baselineMethodTestDuration,
                                            callMeTestDuration)
                          + "% >");

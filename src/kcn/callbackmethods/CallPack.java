@@ -1,6 +1,7 @@
 package kcn.callbackmethods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,7 +62,6 @@ public class CallPack<V, O>
         this.methods = new ArrayList<CallMe<V, O>>();
         methods.addAll(methodReferences);
         removedMethodNames = new ArrayList<String>();
-
     }
 
     /**
@@ -92,7 +92,7 @@ public class CallPack<V, O>
      * - takes a single type V parameter
      * - returns void
      **/
-    public void run(V value)
+    public void run(V... value)
     {
         if(alwaysCheckIfBroke){ handleBadReferences(); }
 
@@ -100,6 +100,46 @@ public class CallPack<V, O>
         {
             method.run(value);
         }
+    }
+
+    /**
+     * Method executes all method on it's list in supplied order:
+     * - There is no direct way to retrieve the object that delivered a value to the returns array.
+     * @param values take 0 to many type V arguments (must of course match wrapped method parameter list)
+     * @return returns an Object[], a result for each method.
+     **/
+    public O[] goGet(V... values)
+    {
+        if(alwaysCheckIfBroke){ handleBadReferences(); }
+
+        Object[] returns = new Object[methods.size()];
+
+        for(int i = 0, methodsSize = methods.size(); i < methodsSize; i++)
+        {
+            returns[i] = methods.get(i).run(values);
+        }
+
+        return (O[])returns;
+    }
+
+    /**
+     * Method executes all method on it's list in supplied order:
+     * - There is no direct way to retrieve the object that delivered a value to the returns array.
+     * @param values take 0 to many type V arguments (must of course match wrapped method parameter list)
+     * @return returns an Object[], a result for each method.
+     **/
+    public HashMap<Object,O> goGetMap(V... values)
+    {
+        if(alwaysCheckIfBroke){ handleBadReferences(); }
+
+        HashMap<Object,O> resultsMap = new HashMap<>();
+
+        for(int i = 0, methodsSize = methods.size(); i < methodsSize; i++)
+        {
+            resultsMap.put(methods.get(i).getExecutingObject(), methods.get(i).run(values));
+        }
+
+        return resultsMap;
     }
 
     /**

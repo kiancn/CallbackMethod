@@ -35,8 +35,6 @@ public class CallbackPack
         methods = new ArrayList<>();
         removedMethodsNamesList = new ArrayList<>();
         removedMethodsCount = 0;
-
-
     }
 
     public List<CallbackMethod> getMethods()
@@ -56,13 +54,13 @@ public class CallbackPack
     }
 
     /**
-     * Method executes a collection of single <V> parameter and <V> return type.
+     * Method executes a collection of <V> parameter and <V> return type.
      */
-    public <V> void run(V value)
+    public <V> void run(V... values)
     {
         if(automaticErrorChecks){ handleBadReferences(); }
 
-        for(CallbackMethod method : methods) { method.run_paramT(value); }
+        for(CallbackMethod method : methods) { method.run(values); }
     }
 
 

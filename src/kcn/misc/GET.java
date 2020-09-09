@@ -43,7 +43,7 @@ public class GET
         return enteredInt;
     }
     /** Method queries the user to verify choice: paramter printed as question. */
-    public static boolean getVerification(String queryText,String confirmationString, String negationString)
+    public static boolean getVerification(String queryText, String confirmationString, String negationString)
     {
         String tempQText = queryText.equals("") ? "Confirm:\ty / n " : queryText;
 
