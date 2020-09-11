@@ -16,7 +16,7 @@ There are <b>
   * CallMes<V,O>,
   * CallPacks<V,O> </b>
 
-* The CallbackMethods and CallbackPack are non-generic types and are ideal for simpler signalling tasks.
+The CallbackMethods and CallbackPack are non-generic types and are ideal for simpler signalling tasks.
 
         * CallbackMethod   
         * CallbackPack        
@@ -24,7 +24,7 @@ There are <b>
 These are non-generic versions that are very easy to pass around;
 but that have low type-safety and limited capabilities when it comes to parameters
 
-* The CallMe<V,O>s and CallPacks<V,O> can do what the non-generics do - and have a degree of type-safety and allow many complex task types.
+The CallMe<V,O>s and CallPacks<V,O> can do what the non-generics do - and have a degree of type-safety and allow many complex task types.
 
         * CallMe<V,O>        type instances are objects that contains a method you can execute whereever
         * CallPack<V,O>      type is a Glorified list of CallMes (but with exception handling)
